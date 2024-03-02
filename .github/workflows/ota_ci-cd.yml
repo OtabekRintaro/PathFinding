@@ -27,6 +27,8 @@ jobs:
           python-version: '3.12' 
       
       # Runs a single command using the runners shell
+      - name: install dependencies
+        run: pip install -r app/requirements.txt
       - name: Run the tests
         run: python3 -m unittest discover -v app/src/tests
           
