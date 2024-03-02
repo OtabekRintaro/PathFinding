@@ -1,6 +1,7 @@
 from unittest import TestCase
 import requests
 
+
 class BaseE2ETest(TestCase):
 
     def setUp(self):
