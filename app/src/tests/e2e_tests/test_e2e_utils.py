@@ -1,5 +1,3 @@
-import requests
-
 from app.src.model.node import NodeIDGenerator
 
 

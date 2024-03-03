@@ -1,7 +1,7 @@
 from flask import Flask, json
 
-from app.main import database
-from app.src.graph_response_parser import GraphResponseParser
+from main import database
+from src.graph_response_parser import GraphResponseParser
 
 # instantiate Flask functionality
 app = Flask(__name__)

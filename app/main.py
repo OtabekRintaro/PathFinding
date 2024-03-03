@@ -1,7 +1,6 @@
-from app.src.base_database import BaseDatabase
-from app.src.mock_database import MockDatabase
-from app import wsgi
-from app.src.model.graph import UndirectedGraph, Graph
+from src.mock_database import MockDatabase
+import wsgi
+from src.model.graph import UndirectedGraph
 
 graph = UndirectedGraph()
 database = MockDatabase()

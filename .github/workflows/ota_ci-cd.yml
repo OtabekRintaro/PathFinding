@@ -29,6 +29,13 @@ jobs:
       # Runs a single command using the runners shell
       - name: install dependencies
         run: pip install -r app/requirements.txt
+      - name: Create env file
+        run: |
+          pwd
+          echo "PYTHONPATH=/home/runner/work/PathFinding/PathFinding" >> $GITHUB_ENV
+          cat $GITHUB_ENV
+      - name: set up environment and run tests
+        run: python3 -v app/main.py &
       - name: Run the tests
         run: python3 -m unittest discover -v app/src/tests
           
