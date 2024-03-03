@@ -105,6 +105,60 @@ class UndirectedGraphTest(unittest.TestCase):
         self.assertEqual(len(self.graph.edges), 20)
         self._assert_all_edges_len_equal(1)
 
+    def test_add_multiple_edges_to_one_edge(self):
+        # given-when
+        nodes = list()
+        nodes.append(self.graph.add_node())
+
+        for i in range(10):
+            nodes.append(self.graph.add_node())
+            self.graph.add_edge(nodes[0], nodes[i+1])
+
+        # then
+        self.assertListEqual(self.graph.nodes, nodes)
+        self.assertEqual(len(self.graph.nodes), 11)
+        self.assertEqual(len(self.graph.edges), 11)
+        self.assertEqual(len(self.graph.edges[0]), 10)
+        self.assertEqual([self._find_node_by_id(node_id) for node_id in self.graph.edges[0]], nodes[1:])
+
+    def test_remove_edge(self):
+        # given
+        node_with_outcoming_edge = self.graph.add_node()
+        node_with_incoming_edge = self.graph.add_node()
+        self.graph.add_edge(node_with_outcoming_edge, node_with_incoming_edge)
+
+        # when
+        self.graph.remove_edge(node_with_outcoming_edge, node_with_incoming_edge)
+
+        # then
+        self.assertEqual(len(self.graph.nodes), 2)
+        self.assertEqual(len(self.graph.edges), 2)
+        self._assert_all_edges_len_equal(0)
+
+    def test_remove_multiple_edges(self):
+        # given
+        nodes = []
+        for i in range(10):
+            nodes.append(self.graph.add_node())
+            nodes.append(self.graph.add_node())
+            self.graph.add_edge(nodes[2*i], nodes[(2*i)+1])
+
+        # when
+        for i in range(10):
+            self.graph.remove_edge(nodes[2*i], nodes[(2*i)+1])
+
+        # then
+        self.assertListEqual(self.graph.nodes, nodes)
+        self.assertEqual(len(self.graph.nodes), 20)
+        self.assertEqual(len(self.graph.edges), 20)
+        self._assert_all_edges_len_equal(0)
+
     def _assert_all_edges_len_equal(self, num):
         for edge in self.graph.edges:
             self.assertEqual(len(edge), num)
+
+    def _find_node_by_id(self, node_id):
+        node_hash = NodeIDGenerator.ids_and_nodes[node_id]
+        for node in self.graph.nodes:
+            if node.__hash__() == node_hash:
+                return node

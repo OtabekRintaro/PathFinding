@@ -55,3 +55,13 @@ class UndirectedGraph(Graph):
         second_node_index = self.nodes.index(second_node)
         self.edges[first_node_index].append(second_node_index)
         self.edges[second_node_index].append(first_node_index)
+
+    def remove_edge(self, first_node, second_node):
+        if not (first_node in self.nodes or second_node in self.nodes):
+            raise InvalidNodeException("One of the nodes in the edge is not in the nodes set.")
+        first_node_index = self.nodes.index(first_node)
+        second_node_index = self.nodes.index(second_node)
+        if not (second_node_index in self.edges[first_node_index] or first_node_index in self.edges[second_node_index]):
+            raise InvalidNodeException("There is no edge between the edges")
+        self.edges[first_node_index].remove(second_node_index)
+        self.edges[second_node_index].remove(first_node_index)
