@@ -1,5 +1,6 @@
 import './App.css';
-import Main from './main/main.js';
+import Node from './utils/Node.js'
+import Display from './Display.js'
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
         <p>
           PATH FINDING ALGOS
         </p>
-        <Main />
+        <Display/>
       </header>
     </div>
   );
