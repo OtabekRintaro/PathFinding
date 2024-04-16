@@ -1,5 +1,4 @@
 import './App.css';
-import Node from './utils/Node.js'
 import Display from './Display.js'
 
 function App() {
