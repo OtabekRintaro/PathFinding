@@ -25,7 +25,7 @@ class GraphResponseParser:
         return GraphResponseParser._update_database_data()
 
     @staticmethod
-    def get_nodes():
+    def get_graph():
         return {'graph': database.get_table('graph')}
 
     @staticmethod

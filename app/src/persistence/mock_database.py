@@ -1,4 +1,4 @@
-from app.src.base_database import BaseDatabase
+from app.src.persistence.base_database import BaseDatabase
 
 
 class MockDatabase(BaseDatabase):
@@ -12,7 +12,7 @@ class MockDatabase(BaseDatabase):
         return self.tables
 
     def get_table(self, table_name):
-        return self.tables[table_name]
+        return self.tables.get(table_name, {})
 
     def is_empty(self):
         return self.tables == {}

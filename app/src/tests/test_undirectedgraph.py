@@ -1,4 +1,4 @@
-from app.src.model.graph import UndirectedGraph
+from app.src.model.undirectedgraph import UndirectedGraph
 import unittest
 
 from app.src.model.node import NodeIDGenerator

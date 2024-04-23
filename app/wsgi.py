@@ -1,10 +1,11 @@
-from flask import Flask, json, url_for
-
+from flask import Flask, json, url_for, request, logging
+from flask_cors import CORS
 from main import database
 from src.graph_response_parser import GraphResponseParser
 
 # instantiate Flask functionality
 app = Flask(__name__)
+cors = CORS(app)
 
 
 @app.route("/")
@@ -35,9 +36,9 @@ def clear_graph():
     return json.dumps(response)
 
 
-@app.route("/nodes", methods=["GET"])
-def get_nodes():
-    response = GraphResponseParser.get_nodes()
+@app.route("/graph", methods=["GET"])
+def get_graph():
+    response = GraphResponseParser.get_graph()
     return json.dumps(response)
 
 
