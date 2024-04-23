@@ -1,50 +1,21 @@
 import axios from 'axios';
 
-const SERVER_ADDRESS = 'http://localhost:5000';
+const SERVER_ADDRESS = 'http://192.168.0.199:5000';
 
-class GraphAdapter{
+export const clear_graph = () =>
+    axios.delete(SERVER_ADDRESS + '/graph').then(response => response.data);
 
-    constructor(){
-        this.client = axios.create({
-            baseURL: SERVER_ADDRESS,
-            json: true
-        });
-    }
+export const get_graph = () =>
+    axios.get(SERVER_ADDRESS + '/graph').then(response => response.data);
 
-    clear_graph(){
-        return this.send_request('DELETE', '/graph');
-    }
+export const add_node = () =>
+    axios.post(SERVER_ADDRESS + '/node').then(response => response.data);
 
-    get_nodes(){
-        return this.send_request('GET', '/nodes');
-    };
+export const remove_node = (node_id) =>
+    axios.delete(SERVER_ADDRESS + '/node/' + node_id.toString()).then(response => response.data);
 
-    add_node(){
-        return this.send_request('POST', '/node');
-    };
+export const add_edge = (node_id1, node_id2) =>
+    axios.post(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2.toString()).then(response => response.data);
 
-    remove_node(node_id){
-        return this.send_request('DELETE', '/node/' + node_id.toString());
-    }
-
-    add_edge(node_id1, node_id2){
-        return this.send_request('POST', '/edges/' + node_id1 + '/' + node_id2.toString());
-    }
-
-    remove_edge(node_id1, node_id2){
-        return this.send_request('DELETE', '/edges/' + node_id1 + '/' + node_id2.toString());
-    }
-
-    async send_request(method, endpoint, data){
-        return this.client({
-            method,
-            url: endpoint,
-            data
-        }).then(response => {
-            return response.data ? response.data : [];
-        }).catch(e => console.log(e));
-    }
-
-};
-
-export default GraphAdapter;
+export const remove_edge = (node_id1, node_id2) =>
+    axios.delete(SERVER_ADDRESS + '/edges/' + node_id1.toString() + '/' + node_id2.toString()).then(response => response.data);

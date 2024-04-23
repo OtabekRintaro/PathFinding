@@ -1,5 +1,6 @@
 import './App.css';
-import Display from './Display.js'
+import GraphWindow from './components/GraphWindow.js';
+// import Display from './Display.js'
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
         <p>
           PATH FINDING ALGOS
         </p>
-        <Display/>
+        <GraphWindow />
       </header>
     </div>
   );
