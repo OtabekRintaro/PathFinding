@@ -12,10 +12,10 @@ export const add_node = () =>
     axios.post(SERVER_ADDRESS + '/node').then(response => response.data);
 
 export const remove_node = (node_id) =>
-    axios.delete(SERVER_ADDRESS + '/node/' + node_id.toString()).then(response => response.data);
+    axios.delete(SERVER_ADDRESS + '/node/' + node_id).then(response => response.data);
 
-export const add_edge = (node_id1, node_id2) =>
-    axios.post(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2.toString()).then(response => response.data);
+export const add_edge = ([node_id1, node_id2]) =>
+    axios.post(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);
 
 export const remove_edge = (node_id1, node_id2) =>
-    axios.delete(SERVER_ADDRESS + '/edges/' + node_id1.toString() + '/' + node_id2.toString()).then(response => response.data);
+    axios.delete(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);
