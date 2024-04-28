@@ -135,6 +135,112 @@ class UndirectedGraphTest(unittest.TestCase):
         self.assertEqual(len(self.graph.edges), 2)
         self._assert_all_edges_len_equal(0)
 
+    def test_remove_first_node_with_an_edge(self):
+        # given
+        node_with_outcoming_edge = self.graph.add_node()
+        node_with_incoming_edge = self.graph.add_node()
+        self.graph.add_edge(node_with_outcoming_edge, node_with_incoming_edge)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node_with_outcoming_edge))
+        del node_with_outcoming_edge
+
+        # then
+        self.assertEqual(len(self.graph.edges[0]), 0)
+        self.assertEqual(NodeIDGenerator.get_id_of_node(self.graph.nodes[0]), 0)
+        self.assertEqual(len(self.graph.nodes), 1)
+        self._assert_all_edges_len_equal(0)
+
+    def test_remove_second_node_with_an_edge(self):
+        # given
+        node_with_outcoming_edge = self.graph.add_node()
+        node_with_incoming_edge = self.graph.add_node()
+        self.graph.add_edge(node_with_outcoming_edge, node_with_incoming_edge)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node_with_incoming_edge))
+        del node_with_incoming_edge
+
+        # then
+        self.assertEqual(NodeIDGenerator.get_id_of_node(self.graph.nodes[0]), 0)
+        self.assertEqual(len(self.graph.nodes), 1)
+        self.assertEqual(len(self.graph.edges), 1)
+        self._assert_all_edges_len_equal(0)
+
+    def test_remove_three_nodes_with_edges_between(self):
+        # given
+        node1 = self.graph.add_node()
+        node2 = self.graph.add_node()
+        node3 = self.graph.add_node()
+
+        self.graph.add_edge(node1, node2)
+        self.graph.add_edge(node2, node3)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node1))
+        del node1
+
+        # then
+        self.assertEqual([NodeIDGenerator.get_id_of_node(node) for node in self.graph.nodes], [0, 1])
+        self.assertEqual(len(self.graph.nodes), 2)
+        self.assertEqual(len(self.graph.edges), 2)
+        for edge in self.graph.edges:
+            self.assertEqual(len(edge), 1)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node2))
+        del node2
+
+        # then
+        self.assertEqual([NodeIDGenerator.get_id_of_node(node) for node in self.graph.nodes], [0])
+        self.assertEqual(len(self.graph.nodes), 1)
+        self.assertEqual(len(self.graph.edges), 1)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node3))
+        del node3
+
+        # then
+        self.assertEqual(len(self.graph.nodes), 0)
+        self.assertEqual(len(self.graph.edges), 0)
+
+    def test_remove_three_nodes_with_edges_between_starting_from_middle(self):
+        # given
+        node1 = self.graph.add_node()
+        node2 = self.graph.add_node()
+        node3 = self.graph.add_node()
+
+        self.graph.add_edge(node1, node2)
+        self.graph.add_edge(node2, node3)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node1))
+        del node1
+
+        # then
+        self.assertEqual([NodeIDGenerator.get_id_of_node(node) for node in self.graph.nodes], [0, 1])
+        self.assertEqual(len(self.graph.nodes), 2)
+        self.assertEqual(len(self.graph.edges), 2)
+        for edge in self.graph.edges:
+            self.assertEqual(len(edge), 1)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node2))
+        del node2
+
+        # then
+        self.assertEqual([NodeIDGenerator.get_id_of_node(node) for node in self.graph.nodes], [0])
+        self.assertEqual(len(self.graph.nodes), 1)
+        self.assertEqual(len(self.graph.edges), 1)
+
+        # when
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node3))
+        del node3
+
+        # then
+        self.assertEqual(len(self.graph.nodes), 0)
+        self.assertEqual(len(self.graph.edges), 0)
+
     def test_remove_multiple_edges(self):
         # given
         nodes = []

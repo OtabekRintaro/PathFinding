@@ -68,7 +68,7 @@ class UndirectedGraphE2ETest(BaseE2ETest):
 
     def test_get_nodes(self):
         # given-when
-        graph = requests.get("http://127.0.0.1:5000/nodes").json()
+        graph = requests.get("http://127.0.0.1:5000/graph").json()
 
         # then
         self.assertEqual(graph, EXPECTED_GRAPHS[0])

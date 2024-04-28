@@ -19,7 +19,7 @@ class NodeIDGenerator(BaseIDGenerator):
         id = NodeIDGenerator.get_id_of_node(node)
         NodeIDGenerator.remove_id(id)
         for key in range(id, NodeIDGenerator.node_count-1):
-            NodeIDGenerator.ids_and_nodes[key] = NodeIDGenerator.ids_and_nodes[key + 1]
+            NodeIDGenerator.ids_and_nodes[key] = NodeIDGenerator.ids_and_nodes[key+1]
         NodeIDGenerator.ids_and_nodes.pop(NodeIDGenerator.node_count - 1)
         NodeIDGenerator.node_count -= 1
 
@@ -49,4 +49,5 @@ class Node:
         NodeIDGenerator.generate_id_node_pair(self)
     
     def __del__(self):
+        print('Deleting node', self.__hash__())
         NodeIDGenerator.remove_id_of_node(self)

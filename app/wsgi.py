@@ -1,11 +1,11 @@
-from flask import Flask, json, url_for, request, logging
+from flask import Flask, jsonify, url_for, request, logging
 from flask_cors import CORS
 from main import database
 from src.graph_response_parser import GraphResponseParser
 
 # instantiate Flask functionality
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
 
 
 @app.route("/")
@@ -33,39 +33,39 @@ def list_of_endpoints():
 @app.route("/graph", methods=["DELETE"])
 def clear_graph():
     response = GraphResponseParser.clear_graph()
-    return json.dumps(response)
+    return jsonify(response)
 
 
 @app.route("/graph", methods=["GET"])
 def get_graph():
     response = GraphResponseParser.get_graph()
-    return json.dumps(response)
+    return jsonify(response)
 
 
 @app.route("/node", methods=["POST"])
 def add_node():
     response = GraphResponseParser.add_node()
-    return json.dumps(response)
+    return jsonify(response)
 
 
 @app.route("/node/<node_id>", methods=["DELETE"])
 def remove_node(node_id):
     response = GraphResponseParser.remove_node(int(node_id))
-    return json.dumps(response)
+    return jsonify(response)
 
 
 @app.route("/edges/<node_id1>/<node_id2>", methods=["POST"])
 def add_edge(node_id1, node_id2):
     response = GraphResponseParser.add_edge(int(node_id1), int(node_id2))
-    return json.dumps(response)
+    return jsonify(response)
 
 
 @app.route("/edges/<node_id1>/<node_id2>", methods=["DELETE"])
 def remove_edge(node_id1, node_id2):
     response = GraphResponseParser.remove_edge(int(node_id1), int(node_id2))
-    return json.dumps(response)
+    return jsonify(response)
 
 
 @app.route("/database", methods=["GET"])
 def get_database():
-    return json.dumps(database.get_tables())
+    return jsonify(database.get_tables())
