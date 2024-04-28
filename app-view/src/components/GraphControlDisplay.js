@@ -1,12 +1,15 @@
 
 
-const ControlDisplay = (props) => {
+const GraphControlDisplay = (props) => {
 
-    const [addNodeMutation, clearGraphMutation] = [...props.mutations]
-    const setAction = props.setAction
-    const informUserAboutInstruction = props.informUserAboutInstruction
+    const [addNodeMutation, clearGraphMutation] = [...props.mutations];
+    const setAction = props.setAction;
+    const informUserAboutInstruction = props.informUserAboutInstruction;
+    const clearInstructions = props.clearInstructions;
 
     const addNode = async (event) => {
+        informUserAboutInstruction('Added node!');
+        setTimeout(clearInstructions, 5000);
         setAction('ADD_NODE');
         addNodeMutation.mutate();
     }
@@ -43,4 +46,4 @@ const ControlDisplay = (props) => {
 }
 
 
-export default ControlDisplay;
+export default GraphControlDisplay;

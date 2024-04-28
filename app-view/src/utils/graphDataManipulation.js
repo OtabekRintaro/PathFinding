@@ -1,6 +1,6 @@
 import { NON_SELECTED } from "../globals/globalVars.js";
 
-const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, addEdgeMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction}) => {
+const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, addEdgeMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction, clearInstructions}) => {
 
     const removeNode = async (node_id) => {
       removeNodeMutation.mutate(node_id);
@@ -12,10 +12,6 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
   
     const addEdge = async ([node_id1, node_id2]) => {
       addEdgeMutation.mutate([selectedId, node_id2]);
-    }
-    
-    const clearInstructions = () => {
-        informUserAboutInstruction('');
     }
 
     const handleClickNode = (nodeId, node) => {

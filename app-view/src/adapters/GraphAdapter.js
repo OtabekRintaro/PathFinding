@@ -19,3 +19,9 @@ export const add_edge = ([node_id1, node_id2]) =>
 
 export const remove_edge = ([node_id1, node_id2]) =>
     axios.delete(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);
+
+export const change_alogrithm = (algorithm_name) => 
+    axios.put(SERVER_ADDRESS + '/algorithm/' + algorithm_name).then(response => response.data);
+
+export const run_algorithm = ([source, target]) => 
+    axios.get(SERVER_ADDRESS + '/algorithm/' + source + '/' + target).then(response => response.data);
