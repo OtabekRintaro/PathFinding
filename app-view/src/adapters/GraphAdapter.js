@@ -17,5 +17,5 @@ export const remove_node = (node_id) =>
 export const add_edge = ([node_id1, node_id2]) =>
     axios.post(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);
 
-export const remove_edge = (node_id1, node_id2) =>
+export const remove_edge = ([node_id1, node_id2]) =>
     axios.delete(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);

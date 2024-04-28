@@ -20,8 +20,10 @@ dictConfig({
     }
 })
 
+HOST_TO_RUN_ON = '0.0.0.0'
+
 graph = UndirectedGraph()
 database = MockDatabase()
 
 if __name__ == "__main__":
-    wsgi.app.run(debug=True)
+    wsgi.app.run(host=HOST_TO_RUN_ON, debug=True)

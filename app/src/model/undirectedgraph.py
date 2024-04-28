@@ -20,8 +20,14 @@ class UndirectedGraph(Graph):
         self.edges.pop(index)
 
         for edge in self.edges:
+            index_to_pop = -1
             for i in range(len(edge)):
-                if edge[i] >= index:
+                if edge[i] == index:
+                    index_to_pop = i
+            if index_to_pop != -1:
+                edge.pop(index_to_pop)
+            for i in range(len(edge)):
+                if edge[i] > index:
                     edge[i] -= 1
 
     def add_edge(self, first_node, second_node):
