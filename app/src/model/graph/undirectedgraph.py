@@ -1,6 +1,6 @@
 from app.src.model.exceptions.invalidnode_exception import InvalidNodeException
-from app.src.model.graph import Graph
-from app.src.model.node import Node
+from app.src.model.graph.graph import Graph
+from app.src.model.graph.node import Node
 
 
 class UndirectedGraph(Graph):

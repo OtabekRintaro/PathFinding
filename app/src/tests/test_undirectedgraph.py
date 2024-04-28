@@ -1,7 +1,7 @@
-from app.src.model.undirectedgraph import UndirectedGraph
+from app.src.model.graph.undirectedgraph import UndirectedGraph
 import unittest
 
-from app.src.model.node import NodeIDGenerator
+from app.src.model.graph.node import NodeIDGenerator
 
 
 class UndirectedGraphTest(unittest.TestCase):

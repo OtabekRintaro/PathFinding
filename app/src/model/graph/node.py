@@ -1,4 +1,4 @@
-from app.src.model.id_generator import BaseIDGenerator
+from app.src.model.graph.id_generator import BaseIDGenerator
 
 KEY_NOT_FOUND = -1
 
@@ -49,5 +49,5 @@ class Node:
         NodeIDGenerator.generate_id_node_pair(self)
     
     def __del__(self):
-        print('Deleting node', self.__hash__())
+        print('Deleting node', NodeIDGenerator.get_id_of_node(self), self.__hash__())
         NodeIDGenerator.remove_id_of_node(self)

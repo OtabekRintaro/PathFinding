@@ -1,4 +1,5 @@
-from app.src.model.undirectedgraph import UndirectedGraph
+from app.src.model.algorithms.dfs import DFS
+from app.src.model.graph.undirectedgraph import UndirectedGraph
 from src.persistence.mock_database import MockDatabase
 import wsgi
 from logging.config import dictConfig
@@ -24,6 +25,13 @@ HOST_TO_RUN_ON = '0.0.0.0'
 
 graph = UndirectedGraph()
 database = MockDatabase()
+algorithm = DFS()
+
+
+def change_algorithm(new_algo):
+    global algorithm
+    algorithm = new_algo
+
 
 if __name__ == "__main__":
     wsgi.app.run(host=HOST_TO_RUN_ON, debug=True)

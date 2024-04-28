@@ -1,6 +1,6 @@
 import unittest
 
-from app.src.model.node import NodeIDGenerator, Node
+from app.src.model.graph.node import NodeIDGenerator, Node
 
 
 class NodeTest(unittest.TestCase):

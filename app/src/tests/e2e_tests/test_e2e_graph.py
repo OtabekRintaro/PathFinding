@@ -1,5 +1,6 @@
-from unittest import TestCase
 import requests
+
+from app.src.tests.e2e_tests.base_e2e_test import BaseE2ETest
 
 EXPECTED_GRAPHS = [
     {'graph':
@@ -35,15 +36,6 @@ EXPECTED_GRAPHS = [
         }
      }
 ]
-
-
-class BaseE2ETest(TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        requests.delete("http://127.0.0.1:5000/graph")
 
 
 class UndirectedGraphE2ETest(BaseE2ETest):
@@ -95,8 +87,4 @@ class UndirectedGraphE2ETest(BaseE2ETest):
 
         # then
         self.assertEqual(graph, EXPECTED_GRAPHS[3])
-
-    @staticmethod
-    def _request_add_node():
-        return requests.post("http://127.0.0.1:5000/node").json()
 
