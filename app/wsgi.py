@@ -41,6 +41,7 @@ def clear_graph():
 @app.route("/graph", methods=["GET"])
 def get_graph():
     response = GraphResponseHandler.get_graph()
+    response.update(AlgorithmResponseHandler.get_algorithm())
     return jsonify(response)
 
 
@@ -79,8 +80,19 @@ def change_algorithm(algorithm_name):
     return jsonify()
 
 
-@app.route("/algorithm/<source>/<target>", methods=["GET"])
+@app.route("/algorithm/<source>/<target>", methods=["POST"])
 def run_algorithm(source, target):
     response = AlgorithmResponseHandler.run_algorithm(int(source), int(target))
-    response.update(GraphResponseHandler.get_graph())
+    return jsonify(response)
+
+
+@app.route("/algorithm/next_step", methods=["PUT"])
+def do_step():
+    response = AlgorithmResponseHandler.do_step()
+    return jsonify(response)
+
+
+@app.route("/algorithm", methods=["DELETE"])
+def clear_algorithm():
+    response = AlgorithmResponseHandler.clear_algorithm()
     return jsonify(response)

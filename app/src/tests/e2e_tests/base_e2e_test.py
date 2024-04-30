@@ -9,7 +9,12 @@ class BaseE2ETest(TestCase):
 
     def tearDown(self):
         requests.delete("http://127.0.0.1:5000/graph")
+        requests.delete("http://127.0.0.1:5000/algorithm")
 
     @staticmethod
     def _request_add_node():
-        return requests.post("http://127.0.0.1:5000/node").json()
+        requests.post("http://127.0.0.1:5000/node").json()
+        return requests.get("http://127.0.0.1:5000/graph").json()
+
+    def _get_graph(self):
+        return requests.get("http://127.0.0.1:5000/graph").json()

@@ -24,4 +24,10 @@ export const change_alogrithm = (algorithm_name) =>
     axios.put(SERVER_ADDRESS + '/algorithm/' + algorithm_name).then(response => response.data);
 
 export const run_algorithm = ([source, target]) => 
-    axios.get(SERVER_ADDRESS + '/algorithm/' + source + '/' + target).then(response => response.data);
+    axios.post(SERVER_ADDRESS + '/algorithm/' + source + '/' + target).then(response => response.data);
+
+export const next_algorithm_step = () => 
+    axios.put(SERVER_ADDRESS + '/algorithm/next_step').then(response => response.data)
+
+export const stop_algorithm_process = () =>
+    axios.delete(SERVER_ADDRESS + '/algorithm').then(response => response.data);

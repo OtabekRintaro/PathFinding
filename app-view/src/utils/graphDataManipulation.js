@@ -27,7 +27,7 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
           else 
           {
             informUserAboutInstruction(`You have connected nodes ${selectedId} and ${nodeId}!`);
-            setTimeout(clearInstructions,5000);
+            clearInstructions(5000);
             addEdge([selectedId, nodeId]);
             setAction('');
             setSelectedId(NON_SELECTED);
@@ -35,6 +35,7 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
           break;
         case 'REM_NODE':
           informUserAboutInstruction(`You have deleted node ${nodeId}! Reindexing nodes (ids > ${nodeId} are decreased by one)!`);
+          clearInstructions(7000);
           removeNode(nodeId);
           break;
         default:
@@ -47,6 +48,7 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
       switch(action){
         case 'REM_EDGE':
           informUserAboutInstruction(`You have deleted edge between ${source} and ${target}!`);
+          clearInstructions(5000);
           removeEdge([source, target]);
           break;
         default:

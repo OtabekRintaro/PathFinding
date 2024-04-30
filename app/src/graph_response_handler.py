@@ -26,7 +26,10 @@ class GraphResponseHandler:
 
     @staticmethod
     def get_graph():
-        return {'graph': database.get_table('graph')}
+        graph_data = {'graph': database.get_table('graph')}
+        if graph_data['graph'] == {}:
+            graph_data.update({'nodes': [], 'edges': {}})
+        return graph_data
 
     @staticmethod
     def add_edge(first_node_id, second_node_id):

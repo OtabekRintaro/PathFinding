@@ -9,7 +9,7 @@ const GraphControlDisplay = (props) => {
 
     const addNode = async (event) => {
         informUserAboutInstruction('Added node!');
-        setTimeout(clearInstructions, 5000);
+        clearInstructions(5000);
         setAction('ADD_NODE');
         addNodeMutation.mutate();
     }
@@ -34,6 +34,11 @@ const GraphControlDisplay = (props) => {
         clearGraphMutation.mutate();
     };
 
+    const clearAction = async () => {
+        setAction('DO_NOTHING');
+        clearInstructions();
+    };
+
     return (
         <div>
             <button onClick={clearGraph}>Clear Graph</button>
@@ -41,6 +46,7 @@ const GraphControlDisplay = (props) => {
             <button onClick={startAddEdge}>Add Edge</button>
             <button onClick={startRemoveNode}>Remove Node</button>
             <button onClick={startRemoveEdge}>Remove Edge</button>
+            <button onClick={clearAction}>Cancel</button>
         </div>
     );
 }
