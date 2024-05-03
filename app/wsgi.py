@@ -2,7 +2,7 @@ from flask import Flask, jsonify, url_for, request, logging
 from flask_cors import CORS
 
 from app.src.algorithm_response_handler import AlgorithmResponseHandler
-from main import database
+from main import Storage
 from src.graph_response_handler import GraphResponseHandler
 
 # instantiate Flask functionality
@@ -30,6 +30,12 @@ def list_of_endpoints():
         urls[i] = f'{urls[i]} <br/><br/>'
 
     return "".join(urls)
+
+
+@app.route("/graph/<graph_type_name>", methods=["PUT"])
+def set_graph_type(graph_type_name):
+    response = GraphResponseHandler.set_graph_type(graph_type_name)
+    return jsonify(response)
 
 
 @app.route("/graph", methods=["DELETE"])
@@ -63,6 +69,17 @@ def add_edge(node_id1, node_id2):
     return jsonify(response)
 
 
+@app.route("/edges/<node_id1>/<node_id2>/<weight>", methods=["POST"])
+def add_edge_with_weight(node_id1, node_id2, weight):
+    response = GraphResponseHandler.add_edge(int(node_id1), int(node_id2), int(weight))
+    return jsonify(response)
+
+@app.route("/edges/<node_id1>/<node_id2>/<weight>", methods=["PUT"])
+def set_weight(node_id1, node_id2, weight):
+    response = GraphResponseHandler.set_weight(int(node_id1), int(node_id2), int(weight))
+    return jsonify(response)
+
+
 @app.route("/edges/<node_id1>/<node_id2>", methods=["DELETE"])
 def remove_edge(node_id1, node_id2):
     response = GraphResponseHandler.remove_edge(int(node_id1), int(node_id2))
@@ -71,7 +88,7 @@ def remove_edge(node_id1, node_id2):
 
 @app.route("/database", methods=["GET"])
 def get_database():
-    return jsonify(database.get_tables())
+    return jsonify(Storage.database.get_tables())
 
 
 @app.route("/algorithm/<algorithm_name>", methods=["PUT"])

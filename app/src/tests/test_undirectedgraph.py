@@ -119,7 +119,7 @@ class UndirectedGraphTest(unittest.TestCase):
         self.assertEqual(len(self.graph.nodes), 11)
         self.assertEqual(len(self.graph.edges), 11)
         self.assertEqual(len(self.graph.edges[0]), 10)
-        self.assertEqual([self._find_node_by_id(node_id) for node_id in self.graph.edges[0]], nodes[1:])
+        self.assertEqual([self._find_node_by_id(node[0]) for node in self.graph.edges[0]], nodes[1:])
 
     def test_remove_edge(self):
         # given
@@ -214,19 +214,19 @@ class UndirectedGraphTest(unittest.TestCase):
         self.graph.add_edge(node2, node3)
 
         # when
-        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node1))
-        del node1
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node2))
+        del node2
 
         # then
         self.assertEqual([NodeIDGenerator.get_id_of_node(node) for node in self.graph.nodes], [0, 1])
         self.assertEqual(len(self.graph.nodes), 2)
         self.assertEqual(len(self.graph.edges), 2)
         for edge in self.graph.edges:
-            self.assertEqual(len(edge), 1)
+            self.assertEqual(len(edge), 0)
 
         # when
-        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node2))
-        del node2
+        self.graph.remove_node(NodeIDGenerator.get_id_of_node(node1))
+        del node1
 
         # then
         self.assertEqual([NodeIDGenerator.get_id_of_node(node) for node in self.graph.nodes], [0])
@@ -258,6 +258,22 @@ class UndirectedGraphTest(unittest.TestCase):
         self.assertEqual(len(self.graph.nodes), 20)
         self.assertEqual(len(self.graph.edges), 20)
         self._assert_all_edges_len_equal(0)
+
+    def test_set_weight_for_the_edge(self):
+        # given
+        node_with_outcoming_edge = self.graph.add_node()
+        node_with_incoming_edge = self.graph.add_node()
+        self.graph.add_edge(node_with_outcoming_edge, node_with_incoming_edge)
+
+        # when
+        self.graph.set_weight(node_with_outcoming_edge, node_with_incoming_edge, 1)
+
+        # then
+        self.assertEqual(len(self.graph.nodes), 2)
+        self.assertEqual(len(self.graph.edges), 2)
+        self._assert_all_edges_len_equal(1)
+        self.assertEqual(self.graph.edges[0][0], [1, 1])
+        self.assertEqual(self.graph.edges[1][0], [0, 1])
 
     def _assert_all_edges_len_equal(self, num):
         for edge in self.graph.edges:

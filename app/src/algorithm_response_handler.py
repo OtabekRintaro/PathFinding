@@ -1,4 +1,5 @@
-from app.main import algorithm, change_algorithm, graph, database
+from app.main import Storage
+from app.src.model.algorithms.algorithm_factory import algorithm_names
 from app.src.model.graph.node import NodeIDGenerator
 
 
@@ -9,12 +10,13 @@ FINISHED_STATE = 'finished'
 class AlgorithmResponseHandler:
     @staticmethod
     def choose_algorithm(algorithm_name):
-        change_algorithm(algorithm_name)
+        Storage.change_algorithm(algorithm_names.get(algorithm_name))
+        print(Storage.algorithm)
 
     @staticmethod
     def run_algorithm(source, target):
-        algorithm_data = algorithm.run(graph.edges, source, target)
-        if algorithm_data['path'] == algorithm.PATH_NOT_FOUND:
+        algorithm_data = Storage.algorithm.run(Storage.graph.edges, source, target)
+        if algorithm_data['path'] == Storage.algorithm.PATH_NOT_FOUND:
             algorithm_data.update({'currentStep': -1, 'currentState': FINISHED_STATE})
         else:
             algorithm_data.update({'currentStep': 0, 'currentState': RUNNING_STATE})
@@ -22,7 +24,7 @@ class AlgorithmResponseHandler:
 
     @staticmethod
     def do_step():
-        updated_table = database.get_tables().get('algorithm')
+        updated_table = Storage.database.get_tables().get('algorithm')
         if updated_table['currentStep'] == len(updated_table['steps']) - 1:
             updated_table.update({'currentStep': -1, 'currentState': FINISHED_STATE})
         else:
@@ -31,7 +33,7 @@ class AlgorithmResponseHandler:
 
     @staticmethod
     def get_algorithm():
-        return {'algorithm': database.get_table('algorithm')}
+        return {'algorithm': Storage.database.get_table('algorithm')}
 
     @staticmethod
     def clear_algorithm():
@@ -42,12 +44,12 @@ class AlgorithmResponseHandler:
     def _update_database_data(algorithm_data):
         new_table = {'graph': {'nodes': NodeIDGenerator.ids, 'edges': AlgorithmResponseHandler._get_graph_edges()},
                      'algorithm': algorithm_data}
-        database.add_table(new_table)
+        Storage.database.add_table(new_table)
         return new_table
 
     @staticmethod
     def _get_graph_edges():
         edges_obj = dict()
-        for i in range(len(graph.edges)):
-            edges_obj.update({i: graph.edges[i]})
+        for i in range(len(Storage.graph.edges)):
+            edges_obj.update({i: Storage.graph.edges[i]})
         return edges_obj

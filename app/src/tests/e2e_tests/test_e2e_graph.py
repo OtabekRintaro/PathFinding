@@ -3,36 +3,51 @@ import requests
 from app.src.tests.e2e_tests.base_e2e_test import BaseE2ETest
 
 EXPECTED_GRAPHS = [
-    {'graph': {
-        'nodes': [],
-        'edges': {}
-    }, 'algorithm': {}},
-    {'graph':
+    {
+        'graph': {
+            'nodes': [],
+            'edges': {}
+        }, 'algorithm': {}
+    },
+    {
+        'graph':
         {
             'nodes': [0],
             'edges': {
                 '0': []
             }
         }, 'algorithm': {}
-     },
-    {'graph':
-        {
-            'nodes': [0, 1],
-            'edges': {
-                '0': [1],
-                '1': [0]
-            }
-        }, 'algorithm': {}
-     },
-    {'graph':
-        {
-            'nodes': [0, 1],
-            'edges': {
-                '0': [],
-                '1': []
-            }
-        }, 'algorithm': {}
-     }
+    },
+    {
+        'graph':
+            {
+                'nodes': [0, 1],
+                'edges': {
+                    '0': [[1, 0]],
+                    '1': [[0, 0]]
+                }
+            }, 'algorithm': {}
+    },
+    {
+        'graph':
+            {
+                'nodes': [0, 1],
+                'edges': {
+                    '0': [],
+                    '1': []
+                }
+            }, 'algorithm': {}
+    },
+    {
+        'graph':
+            {
+                'nodes': [0, 1],
+                'edges': {
+                    '0': [[1, 1]],
+                    '1': [[0, 1]]
+                }
+            }, 'algorithm': {}
+    }
 ]
 
 
@@ -61,7 +76,6 @@ class UndirectedGraphE2ETest(BaseE2ETest):
         # given-when
         graph = requests.get("http://127.0.0.1:5000/graph").json()
 
-
         # then
         self.assertEqual(graph, EXPECTED_GRAPHS[0])
 
@@ -89,4 +103,17 @@ class UndirectedGraphE2ETest(BaseE2ETest):
 
         # then
         self.assertEqual(graph, EXPECTED_GRAPHS[3])
+
+    def set_weight_for_the_edge(self):
+        # given
+        UndirectedGraphE2ETest._request_add_node()
+        UndirectedGraphE2ETest._request_add_node()
+        requests.post("http://127.0.0.1:5000/edges/0/1").json()
+
+        # when
+        requests.put("http://127.0.0.1:5000/edges/0/1/1").json()
+        graph = self._get_graph()
+
+        # then
+        self.assertEqual(graph, EXPECTED_GRAPHS[4])
 

@@ -1,6 +1,6 @@
 import { NON_SELECTED } from "../globals/globalVars.js";
 
-const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, addEdgeMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction, clearInstructions}) => {
+const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, weightRef, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction, clearInstructions}) => {
 
     const removeNode = async (node_id) => {
       removeNodeMutation.mutate(node_id);
@@ -12,6 +12,10 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
   
     const addEdge = async ([node_id1, node_id2]) => {
       addEdgeMutation.mutate([selectedId, node_id2]);
+    }
+    
+    const setWeight = async([node_id1, node_id2, weight]) => {
+      setWeightMutation.mutate([node_id1, node_id2, weight]);
     }
 
     const handleClickNode = (nodeId, node) => {
@@ -29,7 +33,7 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
             informUserAboutInstruction(`You have connected nodes ${selectedId} and ${nodeId}!`);
             clearInstructions(5000);
             addEdge([selectedId, nodeId]);
-            setAction('');
+            setAction('DO_NOTHING');
             setSelectedId(NON_SELECTED);
           }
           break;
@@ -37,6 +41,7 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
           informUserAboutInstruction(`You have deleted node ${nodeId}! Reindexing nodes (ids > ${nodeId} are decreased by one)!`);
           clearInstructions(7000);
           removeNode(nodeId);
+          setAction('DO_NOTHING');
           break;
         default:
           console.log(`Undefined command ${action}! Executing default behaviour - do nothing!`);
@@ -50,6 +55,20 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, ad
           informUserAboutInstruction(`You have deleted edge between ${source} and ${target}!`);
           clearInstructions(5000);
           removeEdge([source, target]);
+          break;
+        case 'SET_WEIGHT':
+          console.log('setting weight!');
+          if(weightRef?.current)
+            console.log(weightRef.current);
+          if(weightRef?.current?.value){
+            setWeight([source, target, weightRef.current.value]);
+            informUserAboutInstruction('You have set weight of ' + weightRef.current.value + ' to the edge between the nodes ' + source + ' and ' + target + '!');
+            clearInstructions(5000);
+            setAction('DO_NOTHING');
+          }
+          else{
+            informUserAboutInstruction('You have to specify the weight first!');
+          }
           break;
         default:
           console.log(`Undefined command ${action}! Executing default behaviour - do nothing!`);

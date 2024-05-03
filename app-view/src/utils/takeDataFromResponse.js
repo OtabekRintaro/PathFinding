@@ -32,12 +32,16 @@ export const takeDataFromResponse = (data_object) => {
       if(currentState && currentState === FINISHED_STATE)
       {
         const path = algorithm.path;
-        console.log('Full Complete Path - ', path);
-        data_for_graph.nodes.forEach(node => {if(path.includes(Number(node.id))) node.color = 'green';});
-        data_for_graph.nodes[path[0]].color = '#00D9A6';
-        data_for_graph.nodes[path[path.length - 1]].color = '#00D9A6';
+        if(path.length > 0){
+          console.log('Full Complete Path - ', path);
+          data_for_graph.nodes.forEach(node => {if(path.includes(Number(node.id))) node.color = 'green';});
+          data_for_graph.nodes[path[0]].color = '#00D9A6';
+          data_for_graph.nodes[path[path.length - 1]].color = '#00D9A6';
+        }else{
+          console.log('Path has not been found!');
+        }
       }
-      if(currentState && currentState === RUNNING_STATE)
+      else if(currentState && currentState === RUNNING_STATE)
       {
         const steps = algorithm.steps;
         console.log('All Steps - ', steps);
@@ -57,8 +61,8 @@ export const takeDataFromResponse = (data_object) => {
   
   const node_not_in_links = (node, links) => {
     const linksWithNode = Object.entries(links).filter( link => {
-      let [outNode, inNodes] = link;
-      return inNodes.filter(inNode => inNode === node).length > 0;
+      let [, inNodes] = link;
+      return inNodes.filter(inNode => inNode[0] === node).length > 0;
     });
     return linksWithNode.length === 0;
   };
@@ -73,7 +77,7 @@ export const takeDataFromResponse = (data_object) => {
     nodes.forEach(node => {
       if(node_not_in_links(node, links))
       {
-        nodes_for_graph.push({'id': node.toString() , 'x': initialX, 'y': initialY});
+        nodes_for_graph.push({'id': node.toString() , 'x': Math.floor(Math.random() * 500), 'y': Math.floor(Math.random() * 500)});
         if(initialX + 15 >= limitWidth)
           initialY = ((initialY + 10) % limitHeight) + 50;
         initialX = ((initialX + 10) % limitWidth) + 50;
@@ -90,7 +94,16 @@ export const takeDataFromResponse = (data_object) => {
     let links_for_graph = [];
     Object.entries(links).forEach(edge => {
       const [outNode, inNodes] = edge;
-      inNodes.forEach(inNode => links_for_graph.push({"source": outNode, "target": inNode.toString()}));
+      inNodes.forEach(inNode => {
+        console.log('debug', );
+        if(inNode[0].toString() !== outNode){
+          links_for_graph.push({"source": outNode, "target": inNode[0].toString(), 
+          "label": (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1] && inNode[0] > Number(outNode)) 
+          ? (inNode[1] !== 0 ? inNode[1].toString() : '') : (
+          (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1]) 
+          ? '' : (inNode[1] !== 0 ? inNode[1].toString() : ''))});
+        }
+      });
     })
     return links_for_graph;
   }

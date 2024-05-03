@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useMutation } from '@tanstack/react-query';
 import { change_alogrithm, run_algorithm, next_algorithm_step, stop_algorithm_process } from "../adapters/GraphAdapter";
 
@@ -6,9 +6,7 @@ const AlgorithmControlDisplay = (props) => {
     const informUserAboutInstruction = props.informUserAboutInstruction;
     const clearInstructions = props.clearInstructions;
     const setAction = props.setAction;
-    const data = props.data;
-    const setData = props.setData;
-    const [sourceRef, targetRef, graphRef, graphWindowRef] = props.refs;
+    const [sourceRef, targetRef] = props.refs;
     const queryClient = props.queryClient;
     
     const algorithmStepRef = useRef(null);
@@ -51,7 +49,7 @@ const AlgorithmControlDisplay = (props) => {
     
     const handleRunAlgorithm = () => {
         if(sourceRef.current.value && targetRef.current.value){
-            informUserAboutInstruction('Running Algorithm...');
+            informUserAboutInstruction('Running Algorithm!');
             runAlgorithmMutation.mutate([sourceRef.current.value, targetRef.current.value]);
         }else{
             informUserAboutInstruction('Choose the source and target nodes first!');
@@ -71,7 +69,7 @@ const AlgorithmControlDisplay = (props) => {
     }
 
     const clearAlgorithm = () => {
-        console.log('Cleard complete path!');
+        console.log('Cleared complete path!');
         clearInstructions(5000);
         clearAlgorithmPath.mutate();
     }
@@ -81,6 +79,8 @@ const AlgorithmControlDisplay = (props) => {
             <label htmlFor="algo">Choose an Algorithm:</label>
             <select ref={selectRef} id="algo" onChange={handleChange}>
                 <option value="dfs">DFS</option>
+                <option value="bfs">BFS</option>
+                <option value="dijkstra">Dijkstra</option>
                 <option value="dummy">DUMMY</option>
             </select>
             <div>

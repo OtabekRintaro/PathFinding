@@ -1,5 +1,5 @@
 from app.src.model.algorithms.algorithm import Algorithm
-from app.src.model.data_structures.Stack import Stack
+from app.src.model.data_structures.stack import Stack
 
 
 class DFS(Algorithm):
@@ -20,9 +20,11 @@ class DFS(Algorithm):
             if current_node == target:
                 return {'path': current_path, 'steps': path}
 
-            for node in graph[current_node]:
-                if not visited[node]:
-                    stack.push((node, current_path + [node]))
+            if target in [node[0] for node in graph[current_node]]:
+                return {'path': current_path + [target], 'steps': path + [target]}
+            for node in sorted(graph[current_node], reverse=True):
+                if not visited[node[0]]:
+                    stack.push((node[0], current_path + [node[0]]))
 
         return {'path': Algorithm.PATH_NOT_FOUND, 'steps': path}
 

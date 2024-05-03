@@ -2,6 +2,9 @@ import axios from 'axios';
 
 const SERVER_ADDRESS = 'http://192.168.0.199:5000';
 
+export const set_graph_type = (graph_type) =>
+    axios.put(SERVER_ADDRESS + '/graph/' + graph_type).then(response => response.data);
+
 export const clear_graph = () =>
     axios.delete(SERVER_ADDRESS + '/graph').then(response => response.data);
 
@@ -17,6 +20,9 @@ export const remove_node = (node_id) =>
 export const add_edge = ([node_id1, node_id2]) =>
     axios.post(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);
 
+export const set_weight = ([node_id1, node_id2, weight]) => 
+    axios.put(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2 + '/' + weight).then(response => response.data)
+
 export const remove_edge = ([node_id1, node_id2]) =>
     axios.delete(SERVER_ADDRESS + '/edges/' + node_id1 + '/' + node_id2).then(response => response.data);
 
@@ -31,3 +37,4 @@ export const next_algorithm_step = () =>
 
 export const stop_algorithm_process = () =>
     axios.delete(SERVER_ADDRESS + '/algorithm').then(response => response.data);
+    

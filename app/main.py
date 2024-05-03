@@ -23,14 +23,19 @@ dictConfig({
 
 HOST_TO_RUN_ON = '0.0.0.0'
 
-graph = UndirectedGraph()
-database = MockDatabase()
-algorithm = DFS()
 
+class Storage:
+    graph = UndirectedGraph()
+    database = MockDatabase()
+    algorithm = DFS()
 
-def change_algorithm(new_algo):
-    global algorithm
-    algorithm = new_algo
+    @staticmethod
+    def change_algorithm(new_algo):
+        Storage.algorithm = new_algo
+
+    @staticmethod
+    def change_graph(new_graph):
+        Storage.graph = new_graph
 
 
 if __name__ == "__main__":

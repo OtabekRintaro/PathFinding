@@ -3,7 +3,7 @@ from app.src.model.graph.graph import Graph
 from app.src.model.graph.node import Node
 
 
-class UndirectedGraph(Graph):
+class DirectedGraph(Graph):
 
     def __init__(self, nodes: list = None, edges: list = None):
         super().__init__(nodes, edges)
@@ -36,7 +36,6 @@ class UndirectedGraph(Graph):
         first_node_index = self.nodes.index(first_node)
         second_node_index = self.nodes.index(second_node)
         self.edges[first_node_index].append([second_node_index, weight])
-        self.edges[second_node_index].append([first_node_index, weight])
 
     def set_weight(self, first_node, second_node, weight):
         if not (first_node in self.nodes or second_node in self.nodes):
@@ -44,20 +43,15 @@ class UndirectedGraph(Graph):
         first_node_index = self.nodes.index(first_node)
         second_node_index = self.nodes.index(second_node)
         second_node_in_first_nodes_index = [node[0] for node in self.edges[first_node_index]].index(second_node_index)
-        first_node_in_second_nodes_index = [node[0] for node in self.edges[second_node_index]].index(first_node_index)
 
         self.edges[first_node_index][second_node_in_first_nodes_index][1] = weight
-        self.edges[second_node_index][first_node_in_second_nodes_index][1] = weight
 
     def remove_edge(self, first_node, second_node):
         if not (first_node in self.nodes or second_node in self.nodes):
             raise InvalidNodeException("One of the nodes in the edge is not in the nodes set.")
         first_node_index = self.nodes.index(first_node)
         second_node_index = self.nodes.index(second_node)
-        if not (second_node_index in [node[0] for node in self.edges[first_node_index]] or
-                first_node_index in [node[0] for node in self.edges[second_node_index]]):
-            raise InvalidNodeException("There is no edge between the nodes")
+        if not (second_node_index in [node[0] for node in self.edges[first_node_index]]):
+            raise InvalidNodeException("There is no edge between the edges")
         first_to_second_edge_index = [node[0] for node in self.edges[first_node_index]].index(second_node_index)
-        second_to_first_edge_index = [node[0] for node in self.edges[second_node_index]].index(first_node_index)
         self.edges[first_node_index].pop(first_to_second_edge_index)
-        self.edges[second_node_index].pop(second_to_first_edge_index)
