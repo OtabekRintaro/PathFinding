@@ -2,7 +2,7 @@ from app.main import Storage
 from app.src.model.graph.node import NodeIDGenerator
 from app.src.model.graph.graph_factory import graph_types
 from app.src.algorithm_response_handler import AlgorithmResponseHandler
-
+from app.src.persistence.json_to_graph import JsonToGraph
 
 EMPTY_GRAPH_TABLE = {'graph': {'nodes': [], 'edges': {}}}
 
@@ -12,6 +12,13 @@ class GraphResponseHandler:
     @staticmethod
     def set_graph_type(graph_type_name):
         Storage.change_graph(graph_types.get(graph_type_name)())
+        return GraphResponseHandler._update_database_data()
+
+    @staticmethod
+    def import_ready_graph(index_of_graph):
+        path_to_graph_file = ('C:\\Users\\mykye\\Desktop\\Thesis_PathFinding\\app\\src\\persistence\\graph_templates'
+                              '\\custom_graph') + str(index_of_graph) + '.json'
+        Storage.graph = JsonToGraph.json_to_graph(path_to_graph_file, Storage.graph.__class__)
         return GraphResponseHandler._update_database_data()
 
     @staticmethod

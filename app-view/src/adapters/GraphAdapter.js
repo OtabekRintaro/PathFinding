@@ -5,6 +5,9 @@ const SERVER_ADDRESS = 'http://192.168.0.199:5000';
 export const set_graph_type = (graph_type) =>
     axios.put(SERVER_ADDRESS + '/graph/' + graph_type).then(response => response.data);
 
+export const set_ready_graph = (graph_index) =>
+    axios.post(SERVER_ADDRESS + '/graph/' + graph_index).then(response => response.data);
+
 export const clear_graph = () =>
     axios.delete(SERVER_ADDRESS + '/graph').then(response => response.data);
 

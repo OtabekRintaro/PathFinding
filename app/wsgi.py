@@ -38,6 +38,12 @@ def set_graph_type(graph_type_name):
     return jsonify(response)
 
 
+@app.route("/graph/<graph_file_index>", methods=["POST"])
+def import_graph_from_file(graph_file_index):
+    response = GraphResponseHandler.import_ready_graph(int(graph_file_index))
+    return jsonify(response)
+
+
 @app.route("/graph", methods=["DELETE"])
 def clear_graph():
     response = GraphResponseHandler.clear_graph()

@@ -1,9 +1,5 @@
-from app.src.model.algorithms.algorithm import Algorithm
+from app.src.model.algorithms.algorithm import Algorithm, INF, ARBITRARY_NUMBER
 import heapq
-
-
-INF = 10000000000
-ARBITRARY_NUMBER = 10
 
 
 class Dijkstra(Algorithm):
@@ -14,22 +10,22 @@ class Dijkstra(Algorithm):
         print(graph)
         path = []
         n = len(graph)
-        d = [INF] * n
-        p = [-1] * n
-        print('d', d)
-        print('p', p)
+        distances = [INF] * n
+        parent = [-1] * n
+        print('d', distances)
+        print('p', parent)
         if self.is_dense(graph):
             print("The graph is dense!")
             visited = [False] * n
 
-            d[source] = 0
+            distances[source] = 0
             for i in range(n):
                 v = -1
                 for j in range(n):
-                    if not visited[j] and (v == -1 or d[j] < d[v]):
+                    if not visited[j] and (v == -1 or distances[j] < distances[v]):
                         v = j
 
-                if d[v] == INF:
+                if distances[v] == INF:
                     break
 
                 path.append(v)
@@ -38,12 +34,12 @@ class Dijkstra(Algorithm):
                     to = node[0]
                     weight = node[1]
 
-                    if d[v] + weight < d[to]:
-                        d[to] = d[v] + weight
-                        p[to] = v
+                    if distances[v] + weight < distances[to]:
+                        distances[to] = distances[v] + weight
+                        parent[to] = v
         else:
             print("The graph is sparse!")
-            d[source] = 0
+            distances[source] = 0
             priority_queue = []
             heapq.heapify(priority_queue)
             heapq.heappush(priority_queue, (source, 0))
@@ -52,7 +48,7 @@ class Dijkstra(Algorithm):
                 (current_node, current_weight) = heapq.heappop(priority_queue)
                 print(current_node)
 
-                if current_weight != d[current_node]:
+                if current_weight != distances[current_node]:
                     continue
 
                 path.append(current_node)
@@ -60,13 +56,13 @@ class Dijkstra(Algorithm):
                     to = node[0]
                     weight = node[1]
 
-                    print(d[current_node] + weight < d[to])
-                    if d[current_node] + weight < d[to]:
-                        d[to] = d[current_node] + weight
-                        p[to] = current_node
-                        heapq.heappush(priority_queue, (to, d[to]))
+                    print(distances[current_node] + weight < distances[to])
+                    if distances[current_node] + weight < distances[to]:
+                        distances[to] = distances[current_node] + weight
+                        parent[to] = current_node
+                        heapq.heappush(priority_queue, (to, distances[to]))
 
-        return {'path': self.get_path(p, source, target), 'steps': path}
+        return {'path': self.get_path(parent, source, target), 'steps': path}
 
     def get_path(self, p, source, target):
         path = []

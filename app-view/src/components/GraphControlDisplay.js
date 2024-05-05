@@ -1,12 +1,21 @@
+import { useMutation } from "@tanstack/react-query";
+import { set_ready_graph } from "../adapters/GraphAdapter";
+import { useRef } from "react";
 
 
 const GraphControlDisplay = (props) => {
-
+    const selectRef = useRef(null);
     const [addNodeMutation, clearGraphMutation] = [...props.mutations];
     const setAction = props.setAction;
     const informUserAboutInstruction = props.informUserAboutInstruction;
     const clearInstructions = props.clearInstructions;
     const weightRef = props.weightRef;
+    const queryClient = props.queryClient;
+
+    const setReadyGraphMutation = useMutation({
+        mutationFn: set_ready_graph,
+        onSuccess: () => queryClient.invalidateQueries(['graph']),
+    });
 
     const addNode = async (event) => {
         informUserAboutInstruction('Added node!');
@@ -56,17 +65,36 @@ const GraphControlDisplay = (props) => {
         setAction('DO_NOTHING');
     };
 
+    const handleGraphChange = (event) => {
+        if(selectRef.current && event.target.value !== 'custom'){
+            console.log("Changing graph to graph - " + event.target.value);
+            selectRef.current.value = event.target.value;
+            setReadyGraphMutation.mutate(selectRef.current.value);
+        }    
+        setAction('DO_NOTHING');
+    }
+
     return (
-        <div>
-            <button onClick={clearGraph}>Clear Graph</button>
-            <button onClick={addNode}>Add Node</button>
-            <button onClick={startAddEdge}>Add Edge</button>
-            <input ref={weightRef} id='weight' type='number' size={5} onClick={handleWeightClick} onChange={handleWeightChange}></input>
-            <button onClick={startSetWeight}>Set Weight</button>
-            <button onClick={startRemoveNode}>Remove Node</button>
-            <button onClick={startRemoveEdge}>Remove Edge</button>
-            <button onClick={clearAction}>Cancel</button>
-        </div>
+        <>
+            <div>
+                <button onClick={clearGraph}>Clear Graph</button>
+                <button onClick={addNode}>Add Node</button>
+                <button onClick={startAddEdge}>Add Edge</button>
+                <input ref={weightRef} id='weight' type='number' size={5} onClick={handleWeightClick} onChange={handleWeightChange}></input>
+                <button onClick={startSetWeight}>Set Weight</button>
+                <button onClick={startRemoveNode}>Remove Node</button>
+                <button onClick={startRemoveEdge}>Remove Edge</button>
+                <button onClick={clearAction}>Cancel</button>
+            </div>
+            <div>
+                <select ref={selectRef} id="graph" onChange={handleGraphChange}>
+                    <option value="custom">Custom Graph</option>
+                    <option value="1">Prepared Graph 1</option>
+                    <option value="2">Prepared Graph 2</option>
+                    <option value="3">Prepared Graph 3</option>
+                </select>
+            </div>
+        </>
     );
 }
 

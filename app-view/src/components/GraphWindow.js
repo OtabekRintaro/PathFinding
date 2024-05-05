@@ -72,6 +72,7 @@ const GraphWindow = ({ graph_query, config }) => {
         mutations={[addNodeMutation, clearGraphMutation]}
         clearInstructions={clearInstructions}
         weightRef={weightRef}
+        queryClient={queryClient}
       />
       <AlgorithmControlDisplay
         informUserAboutInstruction={informUserAboutInstruction}
