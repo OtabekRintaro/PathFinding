@@ -81,6 +81,7 @@ const AlgorithmControlDisplay = (props) => {
                 <option value="dfs">DFS</option>
                 <option value="bfs">BFS</option>
                 <option value="dijkstra">Dijkstra</option>
+                <option value="dijkstra">Bellman-Ford</option>
                 <option value="dummy">DUMMY</option>
             </select>
             <div>

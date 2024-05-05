@@ -1,3 +1,5 @@
+import os
+
 import requests
 from app.src.model.graph.directedgraph import DirectedGraph
 from app.src.model.graph.undirectedgraph import UndirectedGraph
@@ -29,7 +31,8 @@ class TestE2EJsonGraphImport(BaseE2ETest):
         requests.put('http://localhost:5000/graph/undirected')
 
         # when
-        graph = requests.post('http://localhost:5000/graph/1').json().get('graph')
+        graph = (requests.post('http://localhost:5000/graph/1', json={'isE2E': os.environ.get('IsLocalE2E', '')})
+                 .json().get('graph'))
 
         # then
         self.assertEqual(graph['nodes'], NODES_EXPECTED)
@@ -40,7 +43,8 @@ class TestE2EJsonGraphImport(BaseE2ETest):
         requests.put('http://localhost:5000/graph/directed')
 
         # when
-        graph = requests.post('http://localhost:5000/graph/1').json().get('graph')
+        graph = (requests.post('http://localhost:5000/graph/1', json={'isE2E': os.environ.get('IsLocalE2E', '')})
+                 .json().get('graph'))
 
         # then
         self.assertEqual(graph['nodes'], NODES_EXPECTED)

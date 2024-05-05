@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from app.src.model.graph.directedgraph import DirectedGraph
@@ -24,8 +25,8 @@ EDGES_EXPECTED_DIRECTED = [
 
 class TestJsonToGraph(unittest.TestCase):
     def setUp(self):
-        self.json_path = ('C:\\Users\\mykye\\Desktop\\Thesis_PathFinding\\app\\src\\persistence\\graph_templates'
-                          '\\custom_graph1.json')
+        self.json_path = ('app' + os.sep + 'src' + os.sep + 'persistence' + os.sep + 'graph_templates' + os.sep +
+                          'custom_graph1.json')
 
     def test_json_to_undirected_graph(self):
         # given-when

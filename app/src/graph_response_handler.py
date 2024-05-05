@@ -1,3 +1,5 @@
+import os.path
+
 from app.main import Storage
 from app.src.model.graph.node import NodeIDGenerator
 from app.src.model.graph.graph_factory import graph_types
@@ -15,9 +17,12 @@ class GraphResponseHandler:
         return GraphResponseHandler._update_database_data()
 
     @staticmethod
-    def import_ready_graph(index_of_graph):
-        path_to_graph_file = ('C:\\Users\\mykye\\Desktop\\Thesis_PathFinding\\app\\src\\persistence\\graph_templates'
-                              '\\custom_graph') + str(index_of_graph) + '.json'
+    def import_ready_graph(index_of_graph, is_e2e=False):
+        path_to_graph_file = ('app' + os.sep + 'src' + os.sep + 'persistence' + os.sep + 'graph_templates' + os.sep +
+                              'custom_graph' + str(index_of_graph) + '.json')
+        if is_e2e:
+            path_to_graph_file = ('src' + os.sep + 'persistence' + os.sep + 'graph_templates' + os.sep +
+                                  'custom_graph' + str(index_of_graph) + '.json')
         Storage.graph = JsonToGraph.json_to_graph(path_to_graph_file, Storage.graph.__class__)
         return GraphResponseHandler._update_database_data()
 
