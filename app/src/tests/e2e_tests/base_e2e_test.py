@@ -8,8 +8,10 @@ class BaseE2ETest(TestCase):
         pass
 
     def tearDown(self):
-        requests.delete("http://127.0.0.1:5000/graph")
-        requests.delete("http://127.0.0.1:5000/algorithm")
+        response = requests.delete("http://127.0.0.1:5000/graph")
+        response.raise_for_status()
+        response = requests.delete("http://127.0.0.1:5000/algorithm")
+        response.raise_for_status()
 
     @staticmethod
     def _request_add_node():

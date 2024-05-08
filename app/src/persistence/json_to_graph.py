@@ -10,9 +10,9 @@ class JsonToGraph:
     @staticmethod
     def json_to_graph(json_path, class_of_graph):
         print('opening the json file from - ' + os.getcwd() + os.sep + json_path)
-        if os.environ.get('IsLocalTestRun', '') == 'True':
-            json_path = '..' + os.sep + '..' + os.sep + '..' + os.sep + json_path
-        with open(os.getcwd() + os.sep + json_path, 'r') as json_file:
+        # if os.environ.get('IsLocalTestRun', '') == 'True':
+        #     json_path = '..' + os.sep + '..' + os.sep + '..' + os.sep + '..' + os.sep + json_path
+        with open(json_path, 'r') as json_file:
             json_dict = json.load(json_file)
         if class_of_graph is UndirectedGraph:
             new_graph = UndirectedGraph()

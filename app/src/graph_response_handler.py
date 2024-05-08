@@ -19,11 +19,26 @@ class GraphResponseHandler:
     @staticmethod
     def import_ready_graph(index_of_graph, is_e2e=False):
         print('handling response')
-        path_to_graph_file = ('src' + os.sep + 'persistence' + os.sep + 'graph_templates' + os.sep +
-                              'custom_graph' + str(index_of_graph) + '.json')
-        if is_e2e:
-            path_to_graph_file = ('app' + os.sep + 'src' + os.sep + 'persistence' + os.sep + 'graph_templates' + os.sep +
-                                  'custom_graph' + str(index_of_graph) + '.json')
+        dirs_to_find = ['app', 'src', 'persistence', 'graph_templates']
+        path = os.getcwd()
+        print(path)
+        graph_file_name = 'custom_graph' + str(index_of_graph) + '.json'
+        while len(directory := os.listdir(path)) > 0:
+            if graph_file_name in directory:
+                path += os.sep + graph_file_name
+                break
+
+            any_path_found = False
+            for _dir in directory:
+                if _dir in dirs_to_find:
+                    path += os.sep + _dir
+                    any_path_found = True
+                    break
+
+            if not any_path_found:
+                break
+
+        path_to_graph_file = path
         print('importing graph')
         Storage.graph = JsonToGraph.json_to_graph(path_to_graph_file, Storage.graph.__class__)
         return GraphResponseHandler._update_database_data()

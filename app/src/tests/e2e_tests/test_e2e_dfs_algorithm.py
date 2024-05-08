@@ -7,6 +7,7 @@ from app.src.tests.e2e_tests.e2e_utils import RUNNING_STATE, FINISHED_STATE
 class TestE2EDFSAlgorithm(BaseE2ETest):
 
     def setUp(self):
+        requests.put(f'http://127.0.0.1:5000/graph/directed')
         requests.put(f'http://127.0.0.1:5000/algorithm/dfs')
 
     def test_one_node_graph(self):
@@ -85,7 +86,9 @@ class TestE2EDFSAlgorithm(BaseE2ETest):
                 requests.post(f'http://127.0.0.1:5000/edges/{i}/{i-1}')
 
         # when
-        response = requests.post('http://127.0.0.1:5000/algorithm/0/9').json()
+        response = requests.post('http://127.0.0.1:5000/algorithm/9/0').json()
+        print(response)
+        print('dfs.test_multiple_node_connected_graph: path -', response['algorithm']['path'])
         gathered_steps = [response['algorithm']['currentStep']]
         while ((response := requests.put('http://127.0.0.1:5000/algorithm/next_step').json())
                 .get('algorithm').get('currentState') == RUNNING_STATE):
@@ -94,7 +97,7 @@ class TestE2EDFSAlgorithm(BaseE2ETest):
         response = response['algorithm']
 
         # then
-        self.assertEqual(response['path'], [i for i in range(10)])
+        self.assertEqual(response['path'], [i for i in range(9, -1, -1)])
         self.assertEqual(gathered_steps, [i for i in range(10)])
         self.assertEqual(response['currentState'], FINISHED_STATE)
 

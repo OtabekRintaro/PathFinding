@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, url_for, request, logging
+from flask import Flask, jsonify, url_for, request, logging, abort
 from flask_cors import CORS
 
 from app.src.algorithm_response_handler import AlgorithmResponseHandler
@@ -32,6 +32,12 @@ def list_of_endpoints():
     return "".join(urls)
 
 
+@app.errorhandler(500)
+def internal_server_error(e):
+    print('Error: ', str(e))
+    return jsonify(error=str(e)), 500
+
+
 @app.route("/graph/<graph_type_name>", methods=["PUT"])
 def set_graph_type(graph_type_name):
     response = GraphResponseHandler.set_graph_type(graph_type_name)
@@ -44,7 +50,12 @@ def import_graph_from_file(graph_file_index):
     if request and request.json:
         content = request.json
     print('got to sending response')
-    response = GraphResponseHandler.import_ready_graph(int(graph_file_index), content.get('isE2E', '') == 'True')
+    try:
+        response = GraphResponseHandler.import_ready_graph(int(graph_file_index), content.get('isE2E', '') == 'True')
+    except Exception as e:
+        print('Error: ', str(e))
+        abort(500, description=e)
+
     return jsonify(response)
 
 

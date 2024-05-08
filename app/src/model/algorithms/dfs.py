@@ -7,6 +7,7 @@ class DFS(Algorithm):
     def run(self, graph, source, target):
         if source is None or target is None:
             return {'path': Algorithm.PATH_NOT_FOUND, 'steps': []}
+        print('DFS received graph', graph)
         path = []
         stack = Stack()
         stack.push((source, [source]))

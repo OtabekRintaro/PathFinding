@@ -19,8 +19,8 @@ EDGES_EXPECTED_DIRECTED = {
       '0': [[1, 1]],
       '1': [[2, -10], [3, 1]],
       '2': [[4, 1]],
-      '3': [[4, 9]],
-      '4': [],
+      '3': [],
+      '4': [[3, 9]],
 }
 
 
@@ -31,8 +31,9 @@ class TestE2EJsonGraphImport(BaseE2ETest):
         requests.put('http://localhost:5000/graph/undirected')
 
         # when
-        graph = (requests.post('http://localhost:5000/graph/1', json={'isE2E': os.environ.get('IsLocalE2E', '')})
-                 .json().get('graph'))
+        graph_response = requests.post('http://localhost:5000/graph/1', json={'isE2E': os.environ.get('IsLocalE2E', '')})
+        graph_response.raise_for_status()
+        graph = graph_response.json().get('graph', {})
 
         # then
         self.assertEqual(graph['nodes'], NODES_EXPECTED)
@@ -43,8 +44,9 @@ class TestE2EJsonGraphImport(BaseE2ETest):
         requests.put('http://localhost:5000/graph/directed')
 
         # when
-        graph = (requests.post('http://localhost:5000/graph/1', json={'isE2E': os.environ.get('IsLocalE2E', '')})
-                 .json().get('graph'))
+        graph_response = requests.post('http://localhost:5000/graph/1', json={'isE2E': os.environ.get('IsLocalE2E', '')})
+        graph_response.raise_for_status()
+        graph = graph_response.json().get('graph', {})
 
         # then
         self.assertEqual(graph['nodes'], NODES_EXPECTED)

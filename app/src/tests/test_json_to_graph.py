@@ -18,15 +18,37 @@ EDGES_EXPECTED_DIRECTED = [
       [[1, 1]],
       [[2, -10], [3, 1]],
       [[4, 1]],
-      [[4, 9]],
-      []
+      [],
+      [[3, 9]]
     ]
 
 
+# IsLocalTestRun=True when run from the dev environment
 class TestJsonToGraph(unittest.TestCase):
     def setUp(self):
-        self.json_path = ('app' + os.sep + 'src' + os.sep + 'persistence' + os.sep + 'graph_templates' + os.sep +
-                          'custom_graph1.json')
+        self.json_path = self._find_path(1)
+
+    def _find_path(self, index_of_graph):
+        dirs_to_find = ['app', 'src', 'persistence', 'graph_templates']
+        path = os.getcwd()
+        print(path)
+        graph_file_name = 'custom_graph' + str(index_of_graph) + '.json'
+        while len(directory := os.listdir(path)) > 0:
+            if graph_file_name in directory:
+                path += os.sep + graph_file_name
+                break
+
+            any_path_found = False
+            for _dir in directory:
+                if _dir in dirs_to_find:
+                    path += os.sep + _dir
+                    any_path_found = True
+                    break
+
+            if not any_path_found:
+                break
+
+        return path
 
     def test_json_to_undirected_graph(self):
         # given-when
