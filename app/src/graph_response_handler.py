@@ -17,7 +17,7 @@ class GraphResponseHandler:
         return GraphResponseHandler._update_database_data()
 
     @staticmethod
-    def import_ready_graph(index_of_graph, is_e2e=False):
+    def import_ready_graph(index_of_graph):
         print('handling response')
         dirs_to_find = ['app', 'src', 'persistence', 'graph_templates']
         path = os.getcwd()

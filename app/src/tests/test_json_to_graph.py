@@ -45,8 +45,10 @@ class TestJsonToGraph(unittest.TestCase):
                     any_path_found = True
                     break
 
-            if not any_path_found:
+            if not any_path_found and len(path) < 3:
                 break
+            elif not any_path_found:
+                path = os.sep.join(path.split(os.sep)[:-1])
 
         return path
 
