@@ -40,7 +40,10 @@ def set_graph_type(graph_type_name):
 
 @app.route("/graph/<graph_file_index>", methods=["POST"])
 def import_graph_from_file(graph_file_index):
-    content = request.json
+    content = {}
+    if request and request.json:
+        content = request.json
+    print('got to sending response')
     response = GraphResponseHandler.import_ready_graph(int(graph_file_index), content.get('isE2E', '') == 'True')
     return jsonify(response)
 

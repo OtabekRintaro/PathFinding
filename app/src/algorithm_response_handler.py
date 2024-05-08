@@ -20,15 +20,22 @@ class AlgorithmResponseHandler:
             algorithm_data.update({'currentStep': -1, 'currentState': FINISHED_STATE})
         else:
             algorithm_data.update({'currentStep': 0, 'currentState': RUNNING_STATE})
+
         return AlgorithmResponseHandler._update_database_data(algorithm_data)
 
     @staticmethod
     def do_step():
         updated_table = Storage.database.get_tables().get('algorithm')
-        if updated_table['currentStep'] == len(updated_table['steps']) - 1:
-            updated_table.update({'currentStep': -1, 'currentState': FINISHED_STATE})
+        if updated_table.get('isBellmanFord', '') == 'True':
+            if updated_table['currentLink'] >= len(updated_table['links']) - 1 or updated_table['currentLink'] == -1:
+                updated_table.update({'currentLink': -1, 'currentState': FINISHED_STATE})
+            else:
+                updated_table.update({'currentLink': (updated_table['currentLink'] + 1)})
         else:
-            updated_table.update({'currentStep': (updated_table['currentStep'] + 1)})
+            if updated_table['currentStep'] >= len(updated_table['steps']) - 1:
+                updated_table.update({'currentStep': -1, 'currentState': FINISHED_STATE})
+            else:
+                updated_table.update({'currentStep': (updated_table['currentStep'] + 1)})
         return AlgorithmResponseHandler._update_database_data(updated_table)
 
     @staticmethod

@@ -43,16 +43,31 @@ export const takeDataFromResponse = (data_object) => {
       }
       else if(currentState && currentState === RUNNING_STATE)
       {
-        const steps = algorithm.steps;
-        console.log('All Steps - ', steps);
-        const currentHighlightedNodeId = steps[algorithm.currentStep];
-        const visitedNodes = [] 
-        for(let i = 0; i < algorithm.currentStep; i++)
-        {
-          visitedNodes.push(steps[i]);
+        const isBellmanFord = algorithm?.isBellmanFord;
+        if(isBellmanFord){
+          const links = algorithm.links;
+          console.log('All Links - ', links);
+          const [currentHighlightedSource, currentHighlightedTarget] = links[algorithm.currentLink];
+          console.log('current edge to highlight - ', currentHighlightedSource, currentHighlightedTarget);
+          const link_to_highlight = data_for_graph.links.filter(link => {
+            console.log('link',link);
+            return link.source === currentHighlightedSource.toString() && link.target === currentHighlightedTarget.toString();
+          });
+           
+          console.log('link_to_highlight ',link_to_highlight);
+          link_to_highlight.forEach(link => link.color = 'yellow');
+        }else{
+          const steps = algorithm.steps;
+          console.log('All Steps - ', steps);
+          const currentHighlightedNodeId = steps[algorithm.currentStep];
+          const visitedNodes = [] 
+          for(let i = 0; i < algorithm.currentStep; i++)
+          {
+            visitedNodes.push(steps[i]);
+          }
+          data_for_graph.nodes[currentHighlightedNodeId].color = 'yellow';
+          data_for_graph.nodes.forEach(node => {if(visitedNodes.includes(Number(node.id))) node.color = 'grey';} )
         }
-        data_for_graph.nodes[currentHighlightedNodeId].color = 'yellow';
-        data_for_graph.nodes.forEach(node => {if(visitedNodes.includes(Number(node.id))) node.color = 'grey';} )
       } 
     }
 
@@ -95,7 +110,6 @@ export const takeDataFromResponse = (data_object) => {
     Object.entries(links).forEach(edge => {
       const [outNode, inNodes] = edge;
       inNodes.forEach(inNode => {
-        console.log('debug', );
         if(inNode[0].toString() !== outNode){
           links_for_graph.push({"source": outNode, "target": inNode[0].toString(), 
           "label": (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1] && inNode[0] > Number(outNode)) 
