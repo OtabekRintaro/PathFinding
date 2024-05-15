@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { add_node, add_edge, clear_graph, remove_node, remove_edge, set_weight } from "../adapters/GraphAdapter.js";
+import { add_node, add_edge, clear_graph, remove_node, remove_edge, set_weight, set_graph_type } from "../adapters/GraphAdapter.js";
 
 const useMutationsForGraph = ({queryClient}) => {
     const clearGraphMutation = useMutation({
@@ -44,7 +44,11 @@ const useMutationsForGraph = ({queryClient}) => {
         },
     });
 
-    return [clearGraphMutation, addNodeMutation, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation];
+    const setGraphMutation = useMutation({
+        mutationFn: set_graph_type,
+    });
+
+    return [clearGraphMutation, addNodeMutation, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, setGraphMutation];
 };
 
 export default useMutationsForGraph;

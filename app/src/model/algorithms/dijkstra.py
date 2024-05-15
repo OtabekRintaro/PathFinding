@@ -3,6 +3,19 @@ import heapq
 
 
 class Dijkstra(Algorithm):
+
+    desc = ("Dijkstra algorithm - is an algorithm that finds the shortest path in the graph from the given source node "
+            "to all of the other nodes. It uses abstract data structure such as min-priority queue, to find "
+            "the shortest paths, from one node to the other. Let N be a number of the nodes in the graph, then the "
+            "time complexity of the algorithm will be O(N*N). The algorithm is the best fit for the graphs with "
+            "non-negative weighted edges for finding the shortest and minimal path from the source to the target node."
+            "Modifications: All of the negative edges in the graph are treated as 0 by the algorithm, "
+            "so it is not guaranteed that it will give the correct path for the graphs containing the "
+            "negative weights.")
+
+    def description(self):
+        return Dijkstra.desc
+
     def run(self, graph, source, target):
         if source is None or target is None:
             return {'path': Algorithm.PATH_NOT_FOUND, 'steps': []}

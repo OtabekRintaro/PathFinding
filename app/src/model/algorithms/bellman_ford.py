@@ -5,6 +5,18 @@ from app.src.model.algorithms.algorithm import Algorithm, INF
 
 class BellmanFord(Algorithm):
 
+    desc = ("Bellman-Ford algorithm - an algorithm which computes the shortest path from the source node to all "
+            "of the other nodes in a weighted graph. The graph traverses all of the edges of the graph and "
+            "applies relaxations to them, further approximating the total cost of the path. With each step of "
+            "the traversal, it minimizes the path cost and when it comes to the final step, it finds all of "
+            "the shortest and minimal paths from the source node in the graph. Let N be a number of nodes and "
+            "M be a number of edges, then the time complexity of the algorithm is O(N*M). It is optimal for the graphs "
+            "with negative weighted edges and it always finds the correct solution except for the cases when "
+            "there are negative cycles in the graph(the sum of the cycled path is negative).")
+
+    def description(self):
+        return BellmanFord.desc
+
     def run(self, graph, source, target):
         if source is None or target is None:
             return {

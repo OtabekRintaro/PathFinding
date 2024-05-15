@@ -9,6 +9,7 @@ import graphDataManipulation from "../utils/graphDataManipulation.js";
 import GraphControlDisplay from "./GraphControlDisplay.js";
 import AlgorithmControlDisplay from "./AlgorithmControlDisplay.js";
 import algorithmDataManipulation from "../utils/algorithmDataManipulation.js";
+import DescriptionDisplay from "./DescriptionDisplay.js";
 
 const GraphWindow = ({ graph_query, config }) => {
   const queryClient = useQueryClient();
@@ -29,22 +30,24 @@ const GraphWindow = ({ graph_query, config }) => {
   }
 
   console.log("parsed graph response - ", JSON.parse(JSON.stringify(graph_query.data ? graph_query.data : {'graph': {}})));
-  console.log('path length - ');//, graph_query.data.algorithm?.path.length);
+  console.log('path length - ', graph_query?.data?.algorithm?.path?.length);
   let temp_data = {'nodes': [], 'links': []};
+  let algorithm_description = "";
   if(graph_query.isSuccess)
   {
-    temp_data = takeDataFromResponse(graph_query.data);
+    [temp_data, algorithm_description] = takeDataFromResponse(graph_query.data);
     if(graph_query.data.algorithm?.currentState === FINISHED_STATE && graph_query.data.algorithm?.path.length > 0){
       informUserAboutInstruction("Done! Path has been found!");
     }else if(graph_query.data.algorithm?.currentState === FINISHED_STATE && graph_query.data.algorithm?.path.length === 0){
       informUserAboutInstruction("There is no path from the source node to the target node!");
     }
     console.log('actual parsed graph data - ', temp_data);
+
   }
   
   const data = temp_data;
 
-  const [clearGraphMutation, addNodeMutation, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation] = useMutationsForGraph({queryClient});
+  const [clearGraphMutation, addNodeMutation, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, setGraphMutation] = useMutationsForGraph({queryClient});
 
   const [action, setAction] = useState('')
   const [selectedId, setSelectedId] = useState(NON_SELECTED);
@@ -52,6 +55,12 @@ const GraphWindow = ({ graph_query, config }) => {
   const [handleDoubleClickNode] = algorithmDataManipulation({action, setAction, sourceRef, targetRef, informUserAboutInstruction, clearInstructions});
 
   console.log('current action', action);
+
+  if(config['directed'] && setGraphMutation.isIdle){
+    setGraphMutation.mutate('directed');
+  }else if(setGraphMutation.isIdle){
+    setGraphMutation.mutate('undirected');
+  }
 
   return (
     <>
@@ -65,6 +74,9 @@ const GraphWindow = ({ graph_query, config }) => {
           onClickLink={handleClickLink}
           onDoubleClickNode={handleDoubleClickNode}
           resetNodesPositions={true}
+      />
+      <DescriptionDisplay 
+        description={algorithm_description}
       />
       <GraphControlDisplay 
         setAction={setAction}

@@ -11,7 +11,9 @@ class AlgorithmResponseHandler:
     @staticmethod
     def choose_algorithm(algorithm_name):
         Storage.change_algorithm(algorithm_names.get(algorithm_name))
-        print(Storage.algorithm)
+        updated_table = Storage.database.get_tables().get('algorithm', {})
+        updated_table.update({'description': Storage.algorithm.description()})
+        return AlgorithmResponseHandler._update_database_data(updated_table)
 
     @staticmethod
     def run_algorithm(source, target):

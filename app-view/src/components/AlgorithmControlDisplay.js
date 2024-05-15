@@ -24,7 +24,8 @@ const AlgorithmControlDisplay = (props) => {
     });
     
     const changeAlgorithmMutation = useMutation({
-        mutationFn: change_alogrithm
+        mutationFn: change_alogrithm,
+        onSuccess: () => queryClient.invalidateQueries(['graph']),
     });
 
     const clearAlgorithmPath = useMutation({
@@ -74,15 +75,16 @@ const AlgorithmControlDisplay = (props) => {
         clearAlgorithmPath.mutate();
     }
 
+    console.log('rendered');
     return (
         <div>
             <label htmlFor="algo">Choose an Algorithm:</label>
             <select ref={selectRef} id="algo" onChange={handleChange}>
+                <option value="" disabled selected>Select your algorithm</option>
                 <option value="dfs">DFS</option>
                 <option value="bfs">BFS</option>
                 <option value="dijkstra">Dijkstra</option>
                 <option value="bellmanford">Bellman-Ford</option>
-                <option value="dummy">DUMMY</option>
             </select>
             <div>
                 <label htmlFor='source'>Source:</label>

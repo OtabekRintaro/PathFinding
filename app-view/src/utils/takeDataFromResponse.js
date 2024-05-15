@@ -7,7 +7,6 @@ export const takeDataFromResponse = (data_object) => {
     const links = data_object['graph']['edges'];
     const algorithm = data_object?.algorithm;
     
-    
     if(nodes)
     {
       console.log("retrieved nodes ", data_object['graph']['nodes']);
@@ -71,53 +70,53 @@ export const takeDataFromResponse = (data_object) => {
       } 
     }
 
-    return data_for_graph;
+    return [data_for_graph, algorithm?.description ? algorithm.description : ""];
   };
   
-  const node_not_in_links = (node, links) => {
-    const linksWithNode = Object.entries(links).filter( link => {
-      let [, inNodes] = link;
-      return inNodes.filter(inNode => inNode[0] === node).length > 0;
-    });
-    return linksWithNode.length === 0;
-  };
+const node_not_in_links = (node, links) => {
+  const linksWithNode = Object.entries(links).filter( link => {
+    let [, inNodes] = link;
+    return inNodes.filter(inNode => inNode[0] === node).length > 0;
+  });
+  return linksWithNode.length === 0;
+};
 
-  const get_nodes = (nodes, links) => {
-    let nodes_for_graph = []
-    const limitHeight = config['height'] - 100;
-    const limitWidth = config['width'] - 100;
-    let initialX = 50;
-    let initialY = 50;
+const get_nodes = (nodes, links) => {
+  let nodes_for_graph = []
+  const limitHeight = config['height'] - 100;
+  const limitWidth = config['width'] - 100;
+  let initialX = 50;
+  let initialY = 50;
 
-    nodes.forEach(node => {
-      if(node_not_in_links(node, links))
-      {
-        nodes_for_graph.push({'id': node.toString() , 'x': Math.floor(Math.random() * 500), 'y': Math.floor(Math.random() * 500)});
-        if(initialX + 15 >= limitWidth)
-          initialY = ((initialY + 10) % limitHeight) + 50;
-        initialX = ((initialX + 10) % limitWidth) + 50;
-      }else{
-        nodes_for_graph.push({'id': node.toString()})
+  nodes.forEach(node => {
+    if(node_not_in_links(node, links))
+    {
+      nodes_for_graph.push({'id': node.toString() , 'x': Math.floor(Math.random() * 500), 'y': Math.floor(Math.random() * 500)});
+      if(initialX + 15 >= limitWidth)
+        initialY = ((initialY + 10) % limitHeight) + 50;
+      initialX = ((initialX + 10) % limitWidth) + 50;
+    }else{
+      nodes_for_graph.push({'id': node.toString()})
+    }
+    
+  });
+
+  return nodes_for_graph;
+}
+
+const get_links = (links) => {
+  let links_for_graph = [];
+  Object.entries(links).forEach(edge => {
+    const [outNode, inNodes] = edge;
+    inNodes.forEach(inNode => {
+      if(inNode[0].toString() !== outNode){
+        links_for_graph.push({"source": outNode, "target": inNode[0].toString(), 
+        "label": (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1] && inNode[0] > Number(outNode)) 
+        ? (inNode[1] !== 0 ? inNode[1].toString() : '') : (
+        (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1]) 
+        ? '' : (inNode[1] !== 0 ? inNode[1].toString() : ''))});
       }
-      
     });
-
-    return nodes_for_graph;
-  }
-
-  const get_links = (links) => {
-    let links_for_graph = [];
-    Object.entries(links).forEach(edge => {
-      const [outNode, inNodes] = edge;
-      inNodes.forEach(inNode => {
-        if(inNode[0].toString() !== outNode){
-          links_for_graph.push({"source": outNode, "target": inNode[0].toString(), 
-          "label": (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1] && inNode[0] > Number(outNode)) 
-          ? (inNode[1] !== 0 ? inNode[1].toString() : '') : (
-          (links[inNode[0]].map(node => node[0]).includes(Number(outNode)) && inNode[1] === links[inNode[0]].filter(node => node[0] === Number(outNode))[0][1]) 
-          ? '' : (inNode[1] !== 0 ? inNode[1].toString() : ''))});
-        }
-      });
-    })
-    return links_for_graph;
-  }
+  })
+  return links_for_graph;
+}

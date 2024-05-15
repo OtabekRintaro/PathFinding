@@ -74,6 +74,7 @@ const GraphControlDisplay = (props) => {
         setAction('DO_NOTHING');
     }
 
+    console.log('rendered');
     return (
         <>
             <div>
