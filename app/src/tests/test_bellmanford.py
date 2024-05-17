@@ -33,6 +33,7 @@ class BellmanFordTest(unittest.TestCase):
 
         # then
         self.assertEqual(result['isBellmanFord'], 'True')
+        self.assertEqual(result['pathCost'], 0)
         self.assertEqual(result['steps'], [node_id])
 
     def test_two_node_unconnected_graph(self):
@@ -64,6 +65,7 @@ class BellmanFordTest(unittest.TestCase):
 
         # then
         self.assertEqual(result['isBellmanFord'], 'True')
+        self.assertEqual(result['pathCost'], 0)
         self.assertEqual(result['path'], [node_id1, node_id2, node_id3])
 
     def test_multiple_node_dense_connected_graph(self):
@@ -81,6 +83,7 @@ class BellmanFordTest(unittest.TestCase):
 
         # then
         self.assertEqual(result['isBellmanFord'], 'True')
+        self.assertEqual(result['pathCost'], 9)
         self.assertEqual(result['path'], [node_id1, node_id2])
 
     def test_multiple_node_sparse_connected_graph(self):
@@ -100,6 +103,7 @@ class BellmanFordTest(unittest.TestCase):
 
         # then
         self.assertEqual(result['isBellmanFord'], 'True')
+        self.assertEqual(result['pathCost'], 45)
         self.assertEqual(result['path'], [self._get_node_id(i) for i in range(len(self.graph.nodes))])
 
     def test_multiple_node_sparse_unconnected_graph(self):

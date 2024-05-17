@@ -22,6 +22,7 @@ class BellmanFord(Algorithm):
             return {
                 'path': Algorithm.PATH_NOT_FOUND,
                 'steps': [],
+                'pathCost': 0,
                 'isBellmanFord': 'True',
                 'links': [],
                 'currentLink': -1}
@@ -58,6 +59,7 @@ class BellmanFord(Algorithm):
             return {
                 'path': Algorithm.PATH_NOT_FOUND,
                 'steps': [],
+                'pathCost': 0,
                 'isBellmanFord': 'True',
                 'links': [],
                 'currentLink': -1}
@@ -66,6 +68,7 @@ class BellmanFord(Algorithm):
             return {
                 'path': Algorithm.PATH_NOT_FOUND,
                 'steps': [],
+                'pathCost': 0,
                 'isBellmanFord': 'True',
                 'links': [],
                 'currentLink': -1}
@@ -78,11 +81,12 @@ class BellmanFord(Algorithm):
         return {
                 'path': list(reversed(steps)),
                 'steps': path,
+                'pathCost': distances[target],
                 'isBellmanFord': 'True',
-                'links': self.flatten([[[index, node_index[0]] for node_index in graph[index]]
-                                      for index in range(len(graph))]) * rotate_links_times,
+                'links': self._flatten([[[index, node_index[0]] for node_index in graph[index]]
+                                       for index in range(len(graph))]) * rotate_links_times,
                 'currentLink': 0
                 }
 
-    def flatten(self, list_of_lists):
+    def _flatten(self, list_of_lists):
         return [list2 for list1 in list_of_lists for list2 in list1]

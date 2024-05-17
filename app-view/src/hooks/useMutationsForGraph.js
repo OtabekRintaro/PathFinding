@@ -46,6 +46,9 @@ const useMutationsForGraph = ({queryClient}) => {
 
     const setGraphMutation = useMutation({
         mutationFn: set_graph_type,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['graph'])
+        },
     });
 
     return [clearGraphMutation, addNodeMutation, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, setGraphMutation];

@@ -25,6 +25,7 @@ class TestE2EBellmanFordAlgorithm(BaseE2ETest):
 
         # then
         self.assertEqual(response['path'], [0])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['isBellmanFord'], 'True')
         self.assertEqual(response['currentState'], FINISHED_STATE)
 
@@ -61,6 +62,7 @@ class TestE2EBellmanFordAlgorithm(BaseE2ETest):
 
         # then
         self.assertEqual(response['path'], [0, 1])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['isBellmanFord'], 'True')
         self.assertEqual(len(gathered_steps), len(response['links']))
         self.assertEqual(response['currentState'], FINISHED_STATE)
@@ -77,6 +79,7 @@ class TestE2EBellmanFordAlgorithm(BaseE2ETest):
 
         # then
         self.assertEqual(response['path'], [])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['isBellmanFord'], 'True')
         self.assertEqual(response['currentLink'], -1)
         self.assertEqual(response['currentState'], FINISHED_STATE)
@@ -99,6 +102,7 @@ class TestE2EBellmanFordAlgorithm(BaseE2ETest):
 
         # then
         self.assertEqual(response['path'], [i for i in range(9, -1, -1)])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['isBellmanFord'], 'True')
         self.assertEqual(len(gathered_steps), len(response['links']))
         self.assertEqual(response['currentState'], FINISHED_STATE)
@@ -146,6 +150,29 @@ class TestE2EBellmanFordAlgorithm(BaseE2ETest):
 
         # then
         self.assertEqual(response['path'], [0, 1, 3])
+        self.assertEqual(response['pathCost'], 2.0)
+        self.assertEqual(response['isBellmanFord'], 'True')
+        self.assertEqual(len(gathered_steps), len(response['links']))
+        self.assertEqual(response['currentLink'], -1)
+        self.assertEqual(response['currentState'], FINISHED_STATE)
+
+    def test_custom_graph_with_floating_point_number_weights(self):
+        # given
+        requests.post(f'http://127.0.0.1:5000/graph/4')
+
+        # when
+        response = requests.post('http://127.0.0.1:5000/algorithm/0/7').json()
+
+        gathered_steps = [response['algorithm']['currentStep']]
+        while ((response := requests.put('http://127.0.0.1:5000/algorithm/next_step').json())
+                .get('algorithm').get('currentState') == RUNNING_STATE):
+            gathered_steps.append(response['algorithm']['currentStep'])
+
+        response = response['algorithm']
+
+        # then
+        self.assertEqual(response['path'], [0, 1, 2, 4, 5, 7])
+        self.assertAlmostEqual (response['pathCost'], 3.3, delta=0.00001)
         self.assertEqual(response['isBellmanFord'], 'True')
         self.assertEqual(len(gathered_steps), len(response['links']))
         self.assertEqual(response['currentLink'], -1)

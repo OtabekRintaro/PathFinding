@@ -26,6 +26,7 @@ class TestE2EDijkstraAlgorithm(BaseE2ETest):
         # then
         self.assertEqual(response['path'], [0])
         self.assertEqual(gathered_steps, response['path'])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['currentState'], FINISHED_STATE)
 
     def test_two_node_unconnected_graph(self):
@@ -61,6 +62,7 @@ class TestE2EDijkstraAlgorithm(BaseE2ETest):
         # then
         self.assertEqual(response['path'], [0, 1])
         self.assertEqual(gathered_steps, response['path'])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['currentState'], FINISHED_STATE)
 
     def test_multiple_node_unconnected_graph(self):
@@ -97,6 +99,7 @@ class TestE2EDijkstraAlgorithm(BaseE2ETest):
         # then
         self.assertEqual(response['path'], [i for i in range(10)])
         self.assertEqual(gathered_steps, response['path'])
+        self.assertEqual(response['pathCost'], 0)
         self.assertEqual(response['currentState'], FINISHED_STATE)
 
     def test_multiple_node_two_unconnected_graphs(self):
@@ -142,5 +145,27 @@ class TestE2EDijkstraAlgorithm(BaseE2ETest):
         # then
         self.assertEqual(response['path'], [3, 1, 0])
         self.assertEqual([response['steps'][index] for index in gathered_steps], response['steps'])
+        self.assertEqual(response['pathCost'], 2.0)
+        self.assertEqual(response['currentStep'], -1)
+        self.assertEqual(response['currentState'], FINISHED_STATE)
+
+    def test_custom_graph_with_floating_point_number_weights(self):
+        # given
+        requests.post(f'http://127.0.0.1:5000/graph/4')
+
+        # when
+        response = requests.post('http://127.0.0.1:5000/algorithm/0/7').json()
+
+        gathered_steps = [response['algorithm']['currentStep']]
+        while ((response := requests.put('http://127.0.0.1:5000/algorithm/next_step').json())
+                .get('algorithm').get('currentState') == RUNNING_STATE):
+            gathered_steps.append(response['algorithm']['currentStep'])
+
+        response = response['algorithm']
+
+        # then
+        self.assertEqual(response['path'], [0, 1, 2, 4, 7])
+        self.assertEqual([response['steps'][index] for index in gathered_steps], response['steps'])
+        self.assertAlmostEqual(response['pathCost'], 3.3, delta=0.00001)
         self.assertEqual(response['currentStep'], -1)
         self.assertEqual(response['currentState'], FINISHED_STATE)

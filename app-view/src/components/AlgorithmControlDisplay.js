@@ -39,12 +39,12 @@ const AlgorithmControlDisplay = (props) => {
     };
 
     const handleSourceChoice = (event) => {
-        informUserAboutInstruction('Choose the node you want to make a Source!');
+        informUserAboutInstruction('Double-click the node you want to make a Source!');
         setAction('SELECT_SOURCE')
     };
 
     const handleTargetChoice = (event) => {
-        informUserAboutInstruction('Choose the node you want to make a Target!');
+        informUserAboutInstruction('Double-click the node you want to make a Target!');
         setAction('SELECT_TARGET')
     };
     

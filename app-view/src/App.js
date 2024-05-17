@@ -1,4 +1,3 @@
-import './App.css';
 import {
   Routes, Route, Link
 } from 'react-router-dom';
@@ -7,6 +6,9 @@ import DirectedGraphWindow from './components/DirectedGraphWindow.js';
 import Index from './components/Index.js';
 import { clear_graph, get_graph } from "./adapters/GraphAdapter.js";
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 
 function App() {
   const queryClient = useQueryClient();
@@ -26,24 +28,34 @@ function App() {
 
   console.log("rendered");
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          PATH FINDING ALGOS
-        </p>
-          <div>
-            <Link style={padding} to="/" onClick={() => clearGraphMutation.mutate()}>Home</Link>
-            <Link style={padding} to="/undirected">Undirected Graph</Link>
-            <Link style={padding} to="/directed">Directed graph</Link>
-          </div>
-        
-          <Routes>
-            <Route path="/undirected" element={<UndirectedGraphWindow graph_query={graph_query} config={config} />} />
-            <Route path="/directed" element={<DirectedGraphWindow graph_query={graph_query} config={config}/>} />
-            <Route path="/" element={<Index />} />
-          </Routes>
-      </header>
-    </div>
+    <>
+      <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="bg-body-tertiary p-3">
+        <Container>
+          <Navbar.Brand style={{color: "white"}}>
+                PATH FINDING ALGOS
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+            <Nav>
+              <Nav.Link >
+                <Link style={padding} to="/" onClick={() => clearGraphMutation.mutate()}>Home</Link>
+              </Nav.Link>
+              <Nav.Link>
+                <Link style={padding} to="/undirected">Undirected Graph</Link>
+              </Nav.Link>
+              <Nav.Link>
+                <Link style={padding} to="/directed">Directed graph</Link>
+              </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Routes>
+        <Route path="/undirected" element={<UndirectedGraphWindow graph_query={graph_query} config={config} />} />
+        <Route path="/directed" element={<DirectedGraphWindow graph_query={graph_query} config={config}/>} />
+        <Route path="/" element={<Index />} />
+      </Routes>
+    </>
   );
 }
 

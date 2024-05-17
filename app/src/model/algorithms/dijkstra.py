@@ -18,7 +18,7 @@ class Dijkstra(Algorithm):
 
     def run(self, graph, source, target):
         if source is None or target is None:
-            return {'path': Algorithm.PATH_NOT_FOUND, 'steps': []}
+            return {'path': Algorithm.PATH_NOT_FOUND, 'steps': [], 'pathCost': 0}
         graph = [[node if node[1] > 0 else [node[0], 0] for node in edges] for edges in graph]
         print(graph)
         path = []
@@ -75,7 +75,7 @@ class Dijkstra(Algorithm):
                         parent[to] = current_node
                         heapq.heappush(priority_queue, (to, distances[to]))
 
-        return {'path': self.get_path(parent, source, target), 'steps': path}
+        return {'path': self.get_path(parent, source, target), 'steps': path, 'pathCost': distances[target]}
 
     def get_path(self, p, source, target):
         path = []

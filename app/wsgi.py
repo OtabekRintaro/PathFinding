@@ -89,12 +89,13 @@ def add_edge(node_id1, node_id2):
 
 @app.route("/edges/<node_id1>/<node_id2>/<weight>", methods=["POST"])
 def add_edge_with_weight(node_id1, node_id2, weight):
-    response = GraphResponseHandler.add_edge(int(node_id1), int(node_id2), int(weight))
+    response = GraphResponseHandler.add_edge(int(node_id1), int(node_id2), float(weight))
     return jsonify(response)
+
 
 @app.route("/edges/<node_id1>/<node_id2>/<weight>", methods=["PUT"])
 def set_weight(node_id1, node_id2, weight):
-    response = GraphResponseHandler.set_weight(int(node_id1), int(node_id2), int(weight))
+    response = GraphResponseHandler.set_weight(int(node_id1), int(node_id2), float(weight))
     return jsonify(response)
 
 

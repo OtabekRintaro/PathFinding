@@ -27,7 +27,7 @@ class AlgorithmResponseHandler:
 
     @staticmethod
     def do_step():
-        updated_table = Storage.database.get_tables().get('algorithm')
+        updated_table = Storage.database.get_tables().get('algorithm', {})
         if updated_table.get('isBellmanFord', '') == 'True':
             if updated_table['currentLink'] >= len(updated_table['links']) - 1 or updated_table['currentLink'] == -1:
                 updated_table.update({'currentLink': -1, 'currentState': FINISHED_STATE})

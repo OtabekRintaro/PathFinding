@@ -10,6 +10,9 @@ import GraphControlDisplay from "./GraphControlDisplay.js";
 import AlgorithmControlDisplay from "./AlgorithmControlDisplay.js";
 import algorithmDataManipulation from "../utils/algorithmDataManipulation.js";
 import DescriptionDisplay from "./DescriptionDisplay.js";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 const GraphWindow = ({ graph_query, config }) => {
   const queryClient = useQueryClient();
@@ -37,7 +40,12 @@ const GraphWindow = ({ graph_query, config }) => {
   {
     [temp_data, algorithm_description] = takeDataFromResponse(graph_query.data);
     if(graph_query.data.algorithm?.currentState === FINISHED_STATE && graph_query.data.algorithm?.path.length > 0){
-      informUserAboutInstruction("Done! Path has been found!");
+      let path_cost = 0;
+      if(graph_query.data.algorithm?.pathCost){
+        console.log('path cost - ',graph_query.data.algorithm.pathCost);
+        path_cost = graph_query.data.algorithm.pathCost;
+      }
+      informUserAboutInstruction("Done! Path has been found! The path cost is " + path_cost.toString() + "!");
     }else if(graph_query.data.algorithm?.currentState === FINISHED_STATE && graph_query.data.algorithm?.path.length === 0){
       informUserAboutInstruction("There is no path from the source node to the target node!");
     }
@@ -63,37 +71,54 @@ const GraphWindow = ({ graph_query, config }) => {
   }
 
   return (
-    <>
-      <p ref={refToInstructions}></p>
-      <Graph 
-          id="graph-id"
-          ref={graphRef}
-          data={data}
-          config={config}
-          onClickNode={handleClickNode}
-          onClickLink={handleClickLink}
-          onDoubleClickNode={handleDoubleClickNode}
-          resetNodesPositions={true}
-      />
-      <DescriptionDisplay 
-        description={algorithm_description}
-      />
-      <GraphControlDisplay 
-        setAction={setAction}
-        informUserAboutInstruction={informUserAboutInstruction}
-        mutations={[addNodeMutation, clearGraphMutation]}
-        clearInstructions={clearInstructions}
-        weightRef={weightRef}
-        queryClient={queryClient}
-      />
-      <AlgorithmControlDisplay
-        informUserAboutInstruction={informUserAboutInstruction}
-        clearInstructions={clearInstructions}
-        setAction={setAction}
-        refs={[sourceRef, targetRef]}
-        queryClient={queryClient}
-      />
-    </>);
+    <Container>
+
+      <Row className="w-100">
+        <Col>
+          <p ref={refToInstructions}></p>
+        </Col>
+        <Col>
+          <div style={{ outline: '3px solid red', margin: 0, padding: 0 }}>
+            <Graph 
+                id="graph-id"
+                ref={graphRef}
+                data={data}
+                config={config}
+                onClickNode={handleClickNode}
+                onClickLink={handleClickLink}
+                onDoubleClickNode={handleDoubleClickNode}
+                resetNodesPositions={true}
+            />
+          </div>
+        </Col>
+        <Col>
+          <DescriptionDisplay 
+            description={algorithm_description}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <GraphControlDisplay 
+            setAction={setAction}
+            informUserAboutInstruction={informUserAboutInstruction}
+            mutations={[addNodeMutation, clearGraphMutation]}
+            clearInstructions={clearInstructions}
+            weightRef={weightRef}
+            queryClient={queryClient}
+          />
+        </Col>
+        <Col>
+          <AlgorithmControlDisplay
+            informUserAboutInstruction={informUserAboutInstruction}
+            clearInstructions={clearInstructions}
+            setAction={setAction}
+            refs={[sourceRef, targetRef]}
+            queryClient={queryClient}
+          />
+        </Col>
+      </Row>
+    </Container>);
 };
 
 export default GraphWindow;
