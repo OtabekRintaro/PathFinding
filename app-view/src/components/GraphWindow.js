@@ -41,11 +41,18 @@ const GraphWindow = ({ graph_query, config }) => {
     [temp_data, algorithm_description] = takeDataFromResponse(graph_query.data);
     if(graph_query.data.algorithm?.currentState === FINISHED_STATE && graph_query.data.algorithm?.path.length > 0){
       let path_cost = 0;
+      const the_path_string = "The path is: " + graph_query.data.algorithm.path.reduce((whole_path, current_node) => {
+        if(whole_path)
+          return whole_path + ' -> ' + current_node.toString();
+        return current_node.toString();
+      }, '') + '.';
       if(graph_query.data.algorithm?.pathCost){
         console.log('path cost - ',graph_query.data.algorithm.pathCost);
         path_cost = graph_query.data.algorithm.pathCost;
+        informUserAboutInstruction("Done! Path has been found! The path cost is " + path_cost.toString() + "! " + the_path_string);
+      }else{
+        informUserAboutInstruction("Done! Path has been found! " + the_path_string);
       }
-      informUserAboutInstruction("Done! Path has been found! The path cost is " + path_cost.toString() + "!");
     }else if(graph_query.data.algorithm?.currentState === FINISHED_STATE && graph_query.data.algorithm?.path.length === 0){
       informUserAboutInstruction("There is no path from the source node to the target node!");
     }
@@ -59,8 +66,8 @@ const GraphWindow = ({ graph_query, config }) => {
 
   const [action, setAction] = useState('')
   const [selectedId, setSelectedId] = useState(NON_SELECTED);
-  const [handleClickNode, handleClickLink] = graphDataManipulation({action, setAction, selectedId, setSelectedId, weightRef, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction, clearInstructions});
-  const [handleDoubleClickNode] = algorithmDataManipulation({action, setAction, sourceRef, targetRef, informUserAboutInstruction, clearInstructions});
+  const [handleClickNode, handleClickLink] = graphDataManipulation({action, setAction, selectedId, setSelectedId, weightRef, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction});
+  const [handleDoubleClickNode] = algorithmDataManipulation({action, setAction, sourceRef, targetRef, informUserAboutInstruction});
 
   console.log('current action', action);
 
@@ -71,14 +78,13 @@ const GraphWindow = ({ graph_query, config }) => {
   }
 
   return (
-    <Container>
-
-      <Row className="w-100">
-        <Col>
+    <Container data-bs-theme='dark' fluid className="ms-5 me-5">
+      <Row className="w-100 mb-4">
+        <Col style={{ outline: '3px solid grey', margin: 0, padding: 0 }}>
           <p ref={refToInstructions}></p>
         </Col>
-        <Col>
-          <div style={{ outline: '3px solid red', margin: 0, padding: 0 }}>
+        <Col style={{ outline: '3px solid grey', margin: 0, padding: 0 }}>
+          <div >
             <Graph 
                 id="graph-id"
                 ref={graphRef}
@@ -91,7 +97,7 @@ const GraphWindow = ({ graph_query, config }) => {
             />
           </div>
         </Col>
-        <Col>
+        <Col style={{ outline: '3px solid grey', margin: 0, padding: 0 }}>
           <DescriptionDisplay 
             description={algorithm_description}
           />
@@ -100,6 +106,7 @@ const GraphWindow = ({ graph_query, config }) => {
       <Row>
         <Col>
           <GraphControlDisplay 
+            action={action}
             setAction={setAction}
             informUserAboutInstruction={informUserAboutInstruction}
             mutations={[addNodeMutation, clearGraphMutation]}
@@ -111,7 +118,6 @@ const GraphWindow = ({ graph_query, config }) => {
         <Col>
           <AlgorithmControlDisplay
             informUserAboutInstruction={informUserAboutInstruction}
-            clearInstructions={clearInstructions}
             setAction={setAction}
             refs={[sourceRef, targetRef]}
             queryClient={queryClient}

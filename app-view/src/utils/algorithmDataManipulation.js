@@ -1,4 +1,4 @@
-const algorithmDataManipulation = ({action, setAction, sourceRef, targetRef, informUserAboutInstruction, clearInstructions}) => {
+const algorithmDataManipulation = ({action, setAction, sourceRef, targetRef, informUserAboutInstruction}) => {
     const handleDoubleClickNode = (nodeId, node) => {
       console.log(`Double clicked node ${nodeId} in position (${node.x}, ${node.y})`);
       switch(action)
@@ -6,13 +6,11 @@ const algorithmDataManipulation = ({action, setAction, sourceRef, targetRef, inf
         case 'SELECT_SOURCE':
             informUserAboutInstruction(`You have selected node ${nodeId} as a Source!`);
             sourceRef.current.value = nodeId;
-            clearInstructions(5000);
             setAction('DO_NOTHING');
             break;
         case 'SELECT_TARGET':
             informUserAboutInstruction(`You have selected node ${nodeId} as a Target!`);
             targetRef.current.value = nodeId;
-            clearInstructions(5000);
             setAction('DO_NOTHING');
             break;
         default:

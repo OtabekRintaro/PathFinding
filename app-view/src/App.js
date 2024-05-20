@@ -31,20 +31,20 @@ function App() {
     <>
       <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="bg-body-tertiary p-3">
         <Container>
-          <Navbar.Brand style={{color: "white"}}>
+          <Navbar.Brand className='text-white'>
                 PATH FINDING ALGOS
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav"/>
           <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
             <Nav>
-              <Nav.Link >
-                <Link style={padding} to="/" onClick={() => clearGraphMutation.mutate()}>Home</Link>
+              <Nav.Link>
+                <Link className='text-white' style={padding} to="/" onClick={() => clearGraphMutation.mutate()}>Home</Link>
               </Nav.Link>
               <Nav.Link>
-                <Link style={padding} to="/undirected">Undirected Graph</Link>
+                <Link className='text-white' style={padding} to="/undirected" onClick={() => clearGraphMutation.mutate()}>Undirected Graph</Link>
               </Nav.Link>
               <Nav.Link>
-                <Link style={padding} to="/directed">Directed graph</Link>
+                <Link className='text-white' style={padding} to="/directed" onClick={() => clearGraphMutation.mutate()}>Directed graph</Link>
               </Nav.Link>
             </Nav>
           </Navbar.Collapse>

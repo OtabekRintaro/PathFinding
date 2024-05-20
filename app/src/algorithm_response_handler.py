@@ -22,6 +22,7 @@ class AlgorithmResponseHandler:
             algorithm_data.update({'currentStep': -1, 'currentState': FINISHED_STATE})
         else:
             algorithm_data.update({'currentStep': 0, 'currentState': RUNNING_STATE})
+        algorithm_data.update({'description': Storage.algorithm.description()})
 
         return AlgorithmResponseHandler._update_database_data(algorithm_data)
 
@@ -47,6 +48,7 @@ class AlgorithmResponseHandler:
     @staticmethod
     def clear_algorithm():
         cleared_table = {}
+        cleared_table.update({'description': Storage.algorithm.description()})
         return AlgorithmResponseHandler._update_database_data(cleared_table)
 
     @staticmethod

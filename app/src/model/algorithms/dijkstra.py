@@ -55,10 +55,10 @@ class Dijkstra(Algorithm):
             distances[source] = 0
             priority_queue = []
             heapq.heapify(priority_queue)
-            heapq.heappush(priority_queue, (source, 0))
+            heapq.heappush(priority_queue, (0, source))
 
             while len(priority_queue) > 0:
-                (current_node, current_weight) = heapq.heappop(priority_queue)
+                (current_weight, current_node) = heapq.heappop(priority_queue)
                 print(current_node)
 
                 if current_weight != distances[current_node]:
@@ -73,17 +73,21 @@ class Dijkstra(Algorithm):
                     if distances[current_node] + weight < distances[to]:
                         distances[to] = distances[current_node] + weight
                         parent[to] = current_node
-                        heapq.heappush(priority_queue, (to, distances[to]))
+                        heapq.heappush(priority_queue, (distances[to], to))
 
-        return {'path': self.get_path(parent, source, target), 'steps': path, 'pathCost': distances[target]}
+        path_from_source_to_target = self.get_path(parent, source, target)
+        if not path_from_source_to_target:
+            return {'path': Algorithm.PATH_NOT_FOUND, 'steps': [], 'pathCost': 0}
+        return {'path': path_from_source_to_target, 'steps': path, 'pathCost': distances[target]}
 
     def get_path(self, p, source, target):
         path = []
 
         v = target
-        while v != source and v != p[v]:
+        while v != source and v != p[v] and v != -1:
             path.append(v)
             v = p[v]
+        print('the path', path)
         if v != source:
             return []
         path.append(v)

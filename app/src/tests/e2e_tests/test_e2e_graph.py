@@ -7,7 +7,7 @@ EXPECTED_GRAPHS = [
         'graph': {
             'nodes': [],
             'edges': {}
-        }, 'algorithm': {}
+        }
     },
     {
         'graph':
@@ -16,7 +16,7 @@ EXPECTED_GRAPHS = [
             'edges': {
                 '0': []
             }
-        }, 'algorithm': {}
+        }
     },
     {
         'graph':
@@ -26,7 +26,7 @@ EXPECTED_GRAPHS = [
                     '0': [[1, 0]],
                     '1': [[0, 0]]
                 }
-            }, 'algorithm': {}
+            }
     },
     {
         'graph':
@@ -36,7 +36,7 @@ EXPECTED_GRAPHS = [
                     '0': [],
                     '1': []
                 }
-            }, 'algorithm': {}
+            }
     },
     {
         'graph':
@@ -46,7 +46,7 @@ EXPECTED_GRAPHS = [
                     '0': [[1, 1]],
                     '1': [[0, 1]]
                 }
-            }, 'algorithm': {}
+            }
     }
 ]
 
@@ -58,7 +58,7 @@ class UndirectedGraphE2ETest(BaseE2ETest):
         graph = UndirectedGraphE2ETest._request_add_node()
 
         # then
-        self.assertEqual(graph, EXPECTED_GRAPHS[1])
+        self.assertEqual(graph.get('graph'), EXPECTED_GRAPHS[1].get('graph'))
 
     def test_remove_node(self):
         # given
@@ -70,14 +70,14 @@ class UndirectedGraphE2ETest(BaseE2ETest):
         graph = self._get_graph()
 
         # then
-        self.assertEqual(graph, EXPECTED_GRAPHS[0])
+        self.assertEqual(graph.get('graph'), EXPECTED_GRAPHS[0].get('graph'))
 
     def test_get_nodes(self):
         # given-when
         graph = requests.get("http://127.0.0.1:5000/graph").json()
 
         # then
-        self.assertEqual(graph, EXPECTED_GRAPHS[0])
+        self.assertEqual(graph.get('graph'), EXPECTED_GRAPHS[0].get('graph'))
 
     def test_add_edge(self):
         # given
@@ -89,7 +89,7 @@ class UndirectedGraphE2ETest(BaseE2ETest):
         graph = self._get_graph()
 
         # then
-        self.assertEqual(graph, EXPECTED_GRAPHS[2])
+        self.assertEqual(graph.get('graph'), EXPECTED_GRAPHS[2].get('graph'))
 
     def test_remove_edge(self):
         # given
@@ -102,7 +102,7 @@ class UndirectedGraphE2ETest(BaseE2ETest):
         graph = self._get_graph()
 
         # then
-        self.assertEqual(graph, EXPECTED_GRAPHS[3])
+        self.assertEqual(graph.get('graph'), EXPECTED_GRAPHS[3].get('graph'))
 
     def set_weight_for_the_edge(self):
         # given
@@ -115,5 +115,5 @@ class UndirectedGraphE2ETest(BaseE2ETest):
         graph = self._get_graph()
 
         # then
-        self.assertEqual(graph, EXPECTED_GRAPHS[4])
+        self.assertEqual(graph.get('graph'), EXPECTED_GRAPHS[4].get('graph'))
 

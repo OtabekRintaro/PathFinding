@@ -1,11 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { set_ready_graph } from "../adapters/GraphAdapter";
 import { useRef } from "react";
-
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 
 const GraphControlDisplay = (props) => {
     const selectRef = useRef(null);
     const [addNodeMutation, clearGraphMutation] = [...props.mutations];
+    const action = props.action;
     const setAction = props.setAction;
     const informUserAboutInstruction = props.informUserAboutInstruction;
     const clearInstructions = props.clearInstructions;
@@ -19,8 +25,7 @@ const GraphControlDisplay = (props) => {
 
     const addNode = async (event) => {
         informUserAboutInstruction('Added node!');
-        clearInstructions(5000);
-        setAction('ADD_NODE');
+        setAction('DO_NOTHING');
         addNodeMutation.mutate();
     }
 
@@ -30,7 +35,7 @@ const GraphControlDisplay = (props) => {
     };
 
     const startSetWeight = () => {
-        informUserAboutInstruction('To set the weight of the edge, double click on it!');
+        informUserAboutInstruction('To set the weight of the edge, click on it!');
         setAction('SET_WEIGHT')
     }
 
@@ -77,24 +82,46 @@ const GraphControlDisplay = (props) => {
     console.log('rendered');
     return (
         <>
-            <div>
-                <button onClick={clearGraph}>Clear Graph</button>
-                <button onClick={addNode}>Add Node</button>
-                <button onClick={startAddEdge}>Add Edge</button>
-                <input ref={weightRef} id='weight' type='number' size={5} onClick={handleWeightClick} onChange={handleWeightChange}></input>
-                <button onClick={startSetWeight}>Set Weight</button>
-                <button onClick={startRemoveNode}>Remove Node</button>
-                <button onClick={startRemoveEdge}>Remove Edge</button>
-                <button onClick={clearAction}>Cancel</button>
-            </div>
-            <div>
-                <select ref={selectRef} id="graph" onChange={handleGraphChange}>
-                    <option value="custom">Custom Graph</option>
-                    <option value="1">Prepared Graph 1</option>
-                    <option value="2">Prepared Graph 2</option>
-                    <option value="3">Prepared Graph 3</option>
-                </select>
-            </div>
+            <ButtonToolbar className="mb-3" aria-label="Toolbar of Graph manipulation">
+                <ButtonGroup className="me-2" aria-label="Node manipulation">
+                    <Button variant="outline-light" onClick={addNode}>Add Node</Button>{' '}
+                    <Button variant="outline-light" onClick={startRemoveNode}>Remove Node</Button>
+                </ButtonGroup>
+                <ButtonGroup className="me-2" aria-label="Edge manipulation">
+                    <Button variant="outline-light" onClick={startAddEdge}>Add Edge</Button>
+                    <Button variant="outline-light" onClick={startRemoveEdge}>Remove Edge</Button>
+                </ButtonGroup>
+            </ButtonToolbar>
+            <ButtonToolbar className="mb-3" aria-label="Toolbar for Graph Manipulation - Second Row">
+                <Col horizontal xs={6}>
+                    <InputGroup>
+                        <InputGroup.Text className="bg-dark text-white" id="btnGroupAddon">Weight</InputGroup.Text>
+                        <Form.Control className="bg-dark text-white" ref={weightRef} id='weight' type='number' onClick={handleWeightClick} onChange={handleWeightChange}/>
+                        <Button variant="outline-light" onClick={startSetWeight}>Set Weight</Button>
+                    </InputGroup>
+                </Col>
+            </ButtonToolbar>
+            <ButtonToolbar className="mb-3">
+                <Form.Select aria-label="Graph selector" ref={selectRef} id="graph" onChange={handleGraphChange}>
+                    <option value="custom">Select Custom Graph</option>
+                    <option value="5">Binary Tree</option>
+                    <option value="6">Unweighted Sparse Graph 1</option>
+                    <option value="7">Unweighted Sparse Graph 2</option>
+                    <option value="8">Weighted Network Graph 1</option>
+                    <option value="9">Weighted Network Graph 2</option>
+                    <option value="10">Weighted Network Graph (Negative Weights)</option>
+                </Form.Select>
+            </ButtonToolbar>
+            <ButtonToolbar className="mb-3" aria-label="Toolbar of Graph manipulation">
+                <ButtonGroup className="me-2" aria-label="Clearing Graph">
+                    <Button variant="outline-light" onClick={clearGraph}>Clear Graph</Button>
+                </ButtonGroup>
+                <ButtonGroup className="me-2" aria-label="Canceling Current Action">
+                {action !== 'DO_NOTHING' && action !== '' ? 
+                    <Button variant="outline-danger" onClick={clearAction}>Cancel Current Action</Button>
+                        : null }
+                </ButtonGroup>
+            </ButtonToolbar>
         </>
     );
 }

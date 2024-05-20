@@ -1,17 +1,21 @@
 import { useRef } from "react";
 import { useMutation } from '@tanstack/react-query';
 import { change_alogrithm, run_algorithm, next_algorithm_step, stop_algorithm_process } from "../adapters/GraphAdapter";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
 
 const AlgorithmControlDisplay = (props) => {
     const informUserAboutInstruction = props.informUserAboutInstruction;
-    const clearInstructions = props.clearInstructions;
     const setAction = props.setAction;
     const [sourceRef, targetRef] = props.refs;
     const queryClient = props.queryClient;
     
-    const algorithmStepRef = useRef(null);
     const selectRef = useRef(null);
-    const runAlgorithmRef = useRef(null);
     
     const runAlgorithmMutation = useMutation({
         mutationFn: run_algorithm,
@@ -49,19 +53,16 @@ const AlgorithmControlDisplay = (props) => {
     };
     
     const handleRunAlgorithm = () => {
-        if(sourceRef.current.value && targetRef.current.value){
+        if(sourceRef.current.value && targetRef.current.value && selectRef.current?.value !== ""){
             informUserAboutInstruction('Running Algorithm!');
             runAlgorithmMutation.mutate([sourceRef.current.value, targetRef.current.value]);
         }else{
-            informUserAboutInstruction('Choose the source and target nodes first!');
-            clearInstructions(5000);
+            informUserAboutInstruction('Choose the algorithm, source and target nodes first!');
         }
     };
 
     const doStep = (event) => {
         console.log('starting step handling - ');
-
-        algorithmStepRef.hidden = false;
         runNextStepMutation.mutate();
     }
     
@@ -71,31 +72,43 @@ const AlgorithmControlDisplay = (props) => {
 
     const clearAlgorithm = () => {
         console.log('Cleared complete path!');
-        clearInstructions(5000);
         clearAlgorithmPath.mutate();
     }
 
     console.log('rendered');
     return (
-        <div>
+        <>
             <label htmlFor="algo">Choose an Algorithm:</label>
-            <select ref={selectRef} id="algo" onChange={handleChange}>
-                <option value="" disabled selected>Select your algorithm</option>
+            <Form.Select className="mb-3" ref={selectRef} id="algo" onChange={handleChange}>
+                <option value="" disabled selected>Select Your Algorithm</option>
                 <option value="dfs">DFS</option>
                 <option value="bfs">BFS</option>
                 <option value="dijkstra">Dijkstra</option>
                 <option value="bellmanford">Bellman-Ford</option>
-            </select>
-            <div>
-                <label htmlFor='source'>Source:</label>
-                <input ref={sourceRef} id='source' type='text' readOnly={true} size={5} onClick={handleSourceChoice}></input>
-                <label htmlFor='target'>Target:</label>
-                <input ref={targetRef} id='target' type='text' readOnly={true} size={5} onClick={handleTargetChoice}></input>
-            </div>
-            <button ref={runAlgorithmRef} onClick={handleRunAlgorithm}>Run Algorithm</button>
-            <button ref={algorithmStepRef} onClick={doStep} hidden={false}>Next step</button>
-            <button onClick={clearAlgorithm}>Clear Complete Path</button>
-        </div>
+            </Form.Select>
+            <Row>
+                <Col>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text className="bg-dark text-white" id="inputGroup-sizing-sm">Source</InputGroup.Text>
+                        <Form.Control className="bg-dark text-white" ref={sourceRef} id='source' type='text' readOnly={true} size={5} onClick={handleSourceChoice}/>
+                    </InputGroup>
+                </Col>
+                <Col>
+                    <InputGroup className="mb-3">
+                        <InputGroup.Text className="bg-dark text-white">Target</InputGroup.Text >
+                        <Form.Control className="bg-dark text-white" ref={targetRef} id='target' type='text' readOnly={true} size={5} onClick={handleTargetChoice}/>
+                    </InputGroup>
+                </Col>
+            </Row>
+            <br />
+            <ButtonToolbar className="mb-3" aria-label="Toolbar for Graph Manipulation - Second Row">
+                <ButtonGroup className="me-2">
+                    <Button variant="outline-light" onClick={handleRunAlgorithm}>Run Algorithm</Button>
+                    <Button variant="outline-light" onClick={doStep} hidden={false}>Next step</Button>
+                    <Button variant="outline-light" onClick={clearAlgorithm}>Clear Complete Path</Button>
+                </ButtonGroup>
+            </ButtonToolbar>
+        </>
     );
 };
 

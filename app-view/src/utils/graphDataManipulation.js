@@ -1,6 +1,6 @@
 import { NON_SELECTED } from "../globals/globalVars.js";
 
-const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, weightRef, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction, clearInstructions}) => {
+const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, weightRef, addEdgeMutation, setWeightMutation, removeNodeMutation, removeEdgeMutation, informUserAboutInstruction}) => {
 
     const removeNode = async (node_id) => {
       removeNodeMutation.mutate(node_id);
@@ -31,7 +31,6 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, we
           else 
           {
             informUserAboutInstruction(`You have connected nodes ${selectedId} and ${nodeId}!`);
-            clearInstructions(5000);
             addEdge([selectedId, nodeId]);
             setAction('DO_NOTHING');
             setSelectedId(NON_SELECTED);
@@ -39,7 +38,6 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, we
           break;
         case 'REM_NODE':
           informUserAboutInstruction(`You have deleted node ${nodeId}! Reindexing nodes (ids > ${nodeId} are decreased by one)!`);
-          clearInstructions(7000);
           removeNode(nodeId);
           setAction('DO_NOTHING');
           break;
@@ -53,7 +51,6 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, we
       switch(action){
         case 'REM_EDGE':
           informUserAboutInstruction(`You have deleted edge between ${source} and ${target}!`);
-          clearInstructions(5000);
           removeEdge([source, target]);
           break;
         case 'SET_WEIGHT':
@@ -63,7 +60,6 @@ const graphDataManipulation = ({action, setAction, selectedId, setSelectedId, we
           if(weightRef?.current?.value){
             setWeight([source, target, weightRef.current.value]);
             informUserAboutInstruction('You have set weight of ' + weightRef.current.value + ' to the edge between the nodes ' + source + ' and ' + target + '!');
-            clearInstructions(5000);
             setAction('DO_NOTHING');
           }
           else{

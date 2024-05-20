@@ -52,8 +52,16 @@ export const takeDataFromResponse = (data_object) => {
             console.log('link',link);
             return link.source === currentHighlightedSource.toString() && link.target === currentHighlightedTarget.toString();
           });
-           
-          console.log('link_to_highlight ',link_to_highlight);
+          const link_to_fade = data_for_graph.links.filter(link => {
+            console.log('link',link);
+            return link.target === currentHighlightedSource.toString() && link.source === currentHighlightedTarget.toString();
+          });
+          
+          console.log('link_to_fade ', link_to_fade);
+          if(link_to_fade){
+            link_to_fade.forEach(link => link.opacity = 0.5);
+          }
+          console.log('link_to_highlight ', link_to_highlight);
           link_to_highlight.forEach(link => link.color = 'yellow');
         }else{
           const steps = algorithm.steps;
