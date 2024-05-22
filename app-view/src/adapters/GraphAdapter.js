@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SERVER_ADDRESS = 'http://192.168.0.199:5000';
+const SERVER_ADDRESS = 'http://localhost:5000';
 
 export const set_graph_type = (graph_type) =>
     axios.put(SERVER_ADDRESS + '/graph/' + graph_type).then(response => response.data);

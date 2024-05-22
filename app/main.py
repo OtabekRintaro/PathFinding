@@ -21,8 +21,6 @@ dictConfig({
     }
 })
 
-HOST_TO_RUN_ON = '0.0.0.0'
-
 
 class Storage:
     graph = UndirectedGraph()
@@ -39,4 +37,4 @@ class Storage:
 
 
 if __name__ == "__main__":
-    wsgi.app.run(host=HOST_TO_RUN_ON, debug=True)
+    wsgi.app.run(debug=True)
