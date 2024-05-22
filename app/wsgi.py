@@ -19,11 +19,23 @@ def list_of_endpoints():
     urls = list()
     urls.append("<h4>API endpoints.</h4>")
 
+    urls.append("METHOD: PUT, " + url_for('set_graph_type', graph_type_name="graph_type_name"))
+    urls.append("METHOD: POST, " + url_for('import_graph_from_file', graph_file_index="graph_file_index"))
     urls.append("METHOD: DELETE, " + url_for('clear_graph'))
-    urls.append("METHOD: GET, " + url_for('get_nodes'))
+    urls.append("METHOD: GET, " + url_for('get_graph'))
     urls.append("METHOD: POST, " + url_for('add_node'))
     urls.append("METHOD: DELETE, " + url_for('remove_node', node_id="node_id"))
     urls.append("METHOD: POST, " + url_for('add_edge', node_id1="first_node_id", node_id2="second_node_id"))
+    urls.append("METHOD: POST, " + url_for('add_edge_with_weight', node_id1="first_node_id",
+                                           node_id2="second_node_id", weight="weight"))
+    urls.append("METHOD: PUT, " + url_for('set_weight', node_id1="first_node_id",
+                                           node_id2="second_node_id", weight="weight"))
+    urls.append("METHOD: GET, " + url_for('get_database'))
+    urls.append("METHOD: PUT, " + url_for('change_algorithm', algorithm_name="algorithm_name"))
+    urls.append("METHOD: POST, " + url_for('run_algorithm', source="source_node_id",
+                                           target="target_node_id"))
+    urls.append("METHOD: PUT, " + url_for('do_step'))
+    urls.append("METHOD: DELETE, " + url_for('clear_algorithm'))
     urls.append("METHOD: DELETE, " + url_for('remove_edge', node_id1="first_node_id", node_id2="second_node_id"))
 
     for i in range(1, len(urls)):
