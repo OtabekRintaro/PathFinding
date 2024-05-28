@@ -15,9 +15,8 @@ class GraphResponseHandler:
     def set_graph_type(graph_type_name):
         if isinstance(Storage.graph, graph_types.get(graph_type_name)().__class__):
             return {'msg': f'Graph is already of type - {graph_type_name}'}
-        else:
-            Storage.change_graph(graph_types.get(graph_type_name)())
-            return GraphResponseHandler._update_database_data()
+        Storage.change_graph(graph_types.get(graph_type_name)())
+        return GraphResponseHandler._update_database_data()
 
     @staticmethod
     def import_ready_graph(index_of_graph):

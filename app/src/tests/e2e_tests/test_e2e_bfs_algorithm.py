@@ -87,8 +87,6 @@ class TestE2EBFSAlgorithm(BaseE2ETest):
 
         # when
         response = requests.post('http://127.0.0.1:5000/algorithm/0/9').json()
-        print(response)
-        print('bfs.test_multiple_node_connected_graph: path -', response['algorithm']['path'])
         gathered_steps = [response['algorithm']['currentStep']]
         while ((response := requests.put('http://127.0.0.1:5000/algorithm/next_step').json())
                 .get('algorithm').get('currentState') == RUNNING_STATE):

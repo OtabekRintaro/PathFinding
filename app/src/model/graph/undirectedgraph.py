@@ -16,7 +16,6 @@ class UndirectedGraph(Graph):
 
     def remove_node(self, index):
         self.nodes.pop(index)
-
         self.edges.pop(index)
 
         for edge in self.edges:

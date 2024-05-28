@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, url_for, request, logging, abort
+from flask import Flask, jsonify, url_for, abort
 from flask_cors import CORS
 
 from app.src.algorithm_response_handler import AlgorithmResponseHandler

@@ -71,7 +71,7 @@ const AlgorithmControlDisplay = (props) => {
     }
 
     const clearAlgorithm = () => {
-        console.log('Cleared complete path!');
+        informUserAboutInstruction('Cleared complete path!');
         clearAlgorithmPath.mutate();
     }
 
@@ -80,7 +80,6 @@ const AlgorithmControlDisplay = (props) => {
         <>
             <label htmlFor="algo">Choose an Algorithm:</label>
             <Form.Select className="mb-3" ref={selectRef} id="algo" onChange={handleChange}>
-                <option value="" disabled selected>Select Your Algorithm</option>
                 <option value="dfs">DFS</option>
                 <option value="bfs">BFS</option>
                 <option value="dijkstra">Dijkstra</option>
@@ -104,7 +103,7 @@ const AlgorithmControlDisplay = (props) => {
             <ButtonToolbar className="mb-3" aria-label="Toolbar for Graph Manipulation - Second Row">
                 <ButtonGroup className="me-2">
                     <Button variant="outline-light" onClick={handleRunAlgorithm}>Run Algorithm</Button>
-                    <Button variant="outline-light" onClick={doStep} hidden={false}>Next step</Button>
+                    <Button variant="outline-light" onClick={doStep} hidden={false}>Next Step</Button>
                     <Button variant="outline-light" onClick={clearAlgorithm}>Clear Complete Path</Button>
                 </ButtonGroup>
             </ButtonToolbar>

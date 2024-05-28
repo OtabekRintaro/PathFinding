@@ -110,7 +110,6 @@ class BFSTest(unittest.TestCase):
         node_id1 = self._get_node_id(0)
         node_id2 = self._get_node_id(8)
 
-        print(self.graph.edges)
         # when
         path = self.bfs.run(self.graph.edges, node_id1, node_id2).get('path')
 

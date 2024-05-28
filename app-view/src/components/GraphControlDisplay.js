@@ -105,8 +105,8 @@ const GraphControlDisplay = (props) => {
                 <Form.Select aria-label="Graph selector" ref={selectRef} id="graph" onChange={handleGraphChange}>
                     <option value="custom">Select Custom Graph</option>
                     <option value="5">Binary Tree</option>
-                    <option value="6">Unweighted Sparse Graph 1</option>
-                    <option value="7">Unweighted Sparse Graph 2</option>
+                    <option value="6">Unweighted Graph 1</option>
+                    <option value="7">Unweighted Graph 2</option>
                     <option value="8">Weighted Network Graph 1</option>
                     <option value="9">Weighted Network Graph 2</option>
                     <option value="10">Weighted Network Graph (Negative Weights)</option>
